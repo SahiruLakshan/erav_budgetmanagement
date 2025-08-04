@@ -7,7 +7,7 @@
         <main>
             <div class="container-fluid px-4">
                 <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
-                    <h1 class="fw-bold">Main Incomes</h1>
+                    <h1 class="fw-bold">Main Expenses</h1>
                     <span class="text-muted"><?= date('F j, Y'); ?></span>
                 </div>
                 <hr class="mb-4">
@@ -17,12 +17,12 @@
                         <div class="card shadow border-0 h-100">
                             <div class="card-header bg-secondary text-white d-flex align-items-center">
                                 <i class="fas fa-plus me-2"></i>
-                                <span>Add Main Income Type</span>
+                                <span>Add Main Expense Type</span>
                             </div>
                             <div class="card-body">
                                 <form action="<?= base_url('mainincome/add'); ?>" method="post">
                                     <div class="mb-3">
-                                        <label for="income_name" class="form-label fw-semibold">Income Type <span class="text-danger">*</span></label>
+                                        <label for="income_name" class="form-label fw-semibold">Expense Type <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control form-control" id="income_name" name="income_name" required>
                                     </div>
                                     <div class="mb-3">
@@ -41,21 +41,21 @@
                         <div class="card shadow border-0">
                             <div class="card-header bg-dark text-white d-flex align-items-center">
                                 <i class="fas fa-table me-2"></i>
-                                <span>Main Income Types</span>
+                                <span>Main Expense Types</span>
                             </div>
                             <div class="card-body">
                                 <table id="mainIncomeTable" class="table table-hover align-middle">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width: 35%;">Income Name</th>
+                                            <th style="width: 35%;">Expense</th>
                                             <th style="width: 45%;">Comment</th>
                                             <th style="width: 20%;" class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="fw-semibold">Salary</td>
-                                            <td>Monthly</td>
+                                            <td class="fw-semibold">Shopping</td>
+                                            <td>Clothes</td>
                                             <td class="text-center">
                                                 <div class="d-flex justify-content-center gap-1">
                                                     <a href="<?= base_url('mainincome/edit/1'); ?>" class="btn btn-warning btn-sm" title="Edit">

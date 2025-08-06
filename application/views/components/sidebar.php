@@ -59,7 +59,7 @@
                     </nav>
                 </div>
                 <div class="sb-sidenav-menu-heading">User</div>
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="<?= base_url('Auth/logout'); ?>">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
                     Logout
                 </a>
@@ -67,7 +67,7 @@
         </div>
         <div class="sb-sidenav-footer">
             <div class="small">Logged in as:</div>
-            Username
+            <?= $this->session->userdata('user_name'); ?>
         </div>
     </nav>
 </div>

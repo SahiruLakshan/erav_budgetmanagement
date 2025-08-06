@@ -11,26 +11,41 @@
                     <span class="text-muted"><?= date('F j, Y'); ?></span>
                 </div>
                 <hr class="mb-4">
+                
+                <?php if ($this->session->flashdata('success')): ?>
+                    <div class="alert alert-success bg-success text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('success') ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->session->flashdata('error')): ?>
+                    <div class="alert bg-danger text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('error') ?>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
 
                 <div class="row g-4">
                     <div class="col-xl-4">
-                        <div class="card shadow border-0 h-100">
+                        <div class="card shadow border-0">
                             <div class="card-header bg-secondary text-white d-flex align-items-center">
                                 <i class="fas fa-plus me-2"></i>
                                 <span>Add Main Income Type</span>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('mainincome/add'); ?>" method="post">
+                                <form action="<?= base_url('mainincome/add_or_update'); ?>" method="post">
+                                    <input type="hidden" id="record_id" name="record_id">
                                     <div class="mb-3">
-                                        <label for="income_name" class="form-label fw-semibold">Income Type <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control" id="income_name" name="income_name" required>
+                                        <label for="income_name">Income Type <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="income_name" name="income_name">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="comment" class="form-label fw-semibold">Comment</label>
-                                        <textarea name="comment" class="form-control form-control" id="comment" placeholder="Optional note"></textarea>
+                                        <label for="comment">Comment</label>
+                                        <textarea name="comment" class="form-control" id="comment" placeholder="Optional"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-success btn-md">
-                                        <i class="fa-solid fa-save me-2"></i>Save
+                                    <button type="submit" class="btn btn-success" id="submitBtn">
+                                        <i class="fa-solid fa-save me-1"></i><span id="submitText">Save</span>
                                     </button>
                                 </form>
                             </div>
@@ -53,23 +68,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="fw-semibold">Salary</td>
-                                            <td>Monthly</td>
-                                            <td class="text-center">
-                                                <div class="d-flex justify-content-center gap-1">
-                                                    <a href="<?= base_url('mainincome/edit/1'); ?>" class="btn btn-warning btn-sm" title="Edit">
-                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <?php foreach ($mincomes as $income): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($income['income_name']) ?></td>
+                                                <td><?= htmlspecialchars($income['comment']) ?></td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-warning btn-sm editBtn"
+                                                        data-id="<?= $income['id'] ?>">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    <a href="<?= base_url('mainincome/delete/' . $income['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                        <i class="fa fa-trash"></i>
                                                     </a>
-                                                    <a href="<?= base_url('mainincome/delete/1'); ?>" class="btn btn-danger btn-sm" title="Delete">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <!-- Add dynamic rows here -->
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>
@@ -84,5 +99,37 @@
                 $('#mainIncomeTable').DataTable();
             });
         </script>
+
+        <script>
+            $(document).ready(function() {
+                $('.editBtn').click(function() {
+                    const id = $(this).data('id');
+                    $.ajax({
+                        url: '<?= base_url("mainincome/get_by_id/") ?>' + id,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#record_id').val(data.id);
+                            $('#income_name').val(data.income_name);
+                            $('#comment').val(data.comment);
+                            $('#submitText').text('Update');
+                            $('#submitBtn').removeClass('btn-success').addClass('btn-warning');
+                        },
+                        error: function() {
+                            alert('Error loading data!');
+                        }
+                    });
+                });
+            });
+
+            setTimeout(function() {
+                const alert = document.querySelector('.alert');
+                if (alert) {
+                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                    bsAlert.close();
+                }
+            }, 3000);
+        </script>
+
     </div>
 </div>

@@ -1,68 +1,73 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mainincome extends CI_Controller
+class Subexpense extends CI_Controller
 {
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Mainincome_model');
+        $this->load->model('Subexpense_model');
+        $this->load->model('Mainexpense_model');
         $this->load->library('form_validation');
     }
 
     public function index()
     {
-        $data['mincomes'] = $this->Mainincome_model->get_all();
+        $data['mexpenses'] = $this->Mainexpense_model->get_all();
+        $data['sexpenses'] = $this->Subexpense_model->get_all(); 
         $data['success'] = $this->session->flashdata('success');
         $data['error'] = $this->session->flashdata('error');
-        $this->load->view('pages/mainincome', $data);
+        $this->load->view('pages/subexpenses', $data);
     }
 
     public function add_or_update()
     {
-        $this->form_validation->set_rules('income_name', 'Income Type', 'required');
+        $this->form_validation->set_rules('main_expense_id', 'Mainexpense', 'required');
+        $this->form_validation->set_rules('sub_expense_name', 'Subexpense', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors('<div class="text-white">', '</div>'));
-            redirect('mainincome');
+            redirect('subexpense');
         }
 
         $id = $this->input->post('record_id');
-        $income_name = $this->input->post('income_name');
+        $sub_expense_name = $this->input->post('sub_expense_name');
+        $main_expense_id = $this->input->post('main_expense_id');
         $comment = $this->input->post('comment');
         $user_id = $this->session->userdata('user_id');
 
         $data = [
-            'income_name' => $income_name,
+            'sub_expense_name' => $sub_expense_name,
+            'tbl_main_expense_types_id' => $main_expense_id,
             'comment' => $comment,
             'tbl_user_id' => $user_id,
-            'status' => 1 
+            'status' => 1
         ];
 
         if ($id) {
-            $this->Mainincome_model->update($id, $data);
+            $this->Subexpense_model->update($id, $data);
             $this->session->set_flashdata('success', 'Record updated successfully.');
         } else {
-            $this->Mainincome_model->insert($data);
+            $this->Subexpense_model->insert($data);
             $this->session->set_flashdata('success', 'Record added successfully.');
         }
 
-        redirect('mainincome');
+        redirect('subexpense');
     }
 
 
     public function get_by_id($id)
     {
-        $data = $this->Mainincome_model->get_by_id($id);
+        $data = $this->Subexpense_model->get_by_id($id);
         echo json_encode($data);
     }
 
     public function delete($id)
     {
-        $data['status'] = 0;
-        $this->Mainincome_model->delete($id, $data);
+        $data['status'] = 0; 
+        $this->Subexpense_model->delete($id, $data);
         $this->session->set_flashdata('success', 'Record deleted successfully.');
-        redirect('mainincome');
+        redirect('subexpense');
     }
 }

@@ -91,7 +91,6 @@
                     </div>
                 </div>
             </div>
-
         </main>
         <?php include(APPPATH . 'views/components/footer.php'); ?>
         <script>

@@ -1,7 +1,6 @@
 <?php
 class Subincome_model extends CI_Model
 {
-
     public function get_all() {
         $this->db->select('sub_income_types.*, main_income_types.income_name');
         $this->db->from('sub_income_types');

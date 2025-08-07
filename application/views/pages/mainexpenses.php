@@ -12,6 +12,20 @@
                 </div>
                 <hr class="mb-4">
 
+                <?php if ($this->session->flashdata('success')): ?>
+                    <div class="alert alert-success bg-success text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('success') ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->session->flashdata('error')): ?>
+                    <div class="alert bg-danger text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('error') ?>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
                 <div class="row g-4">
                     <div class="col-xl-4">
                         <div class="card shadow border-0 h-100">
@@ -20,17 +34,18 @@
                                 <span>Add Main Expense Type</span>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('mainincome/add'); ?>" method="post">
+                                <form action="<?= base_url('mainexpense/add_or_update'); ?>" method="post">
+                                    <input type="hidden" id="record_id" name="record_id">
                                     <div class="mb-3">
                                         <label for="income_name" class="form-label fw-semibold">Expense Type <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control" id="income_name" name="income_name" required>
+                                        <input type="text" class="form-control form-control" id="expense_name" name="expense_name">
                                     </div>
                                     <div class="mb-3">
                                         <label for="comment" class="form-label fw-semibold">Comment</label>
                                         <textarea name="comment" class="form-control form-control" id="comment" placeholder="Optional note"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-success btn-md">
-                                        <i class="fa-solid fa-save me-2"></i>Save
+                                    <button type="submit" class="btn btn-success btn-md" id="expensesubmitBtn">
+                                        <i class="fa-solid fa-save me-1"></i><span id="submitText">Save</span>
                                     </button>
                                 </form>
                             </div>
@@ -44,7 +59,7 @@
                                 <span>Main Expense Types</span>
                             </div>
                             <div class="card-body">
-                                <table id="mainIncomeTable" class="table table-hover align-middle">
+                                <table id="mainexpenseTable" class="table table-hover align-middle">
                                     <thead class="table-light">
                                         <tr>
                                             <th style="width: 35%;">Expense</th>
@@ -53,22 +68,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="fw-semibold">Shopping</td>
-                                            <td>Clothes</td>
-                                            <td class="text-center">
-                                                <div class="d-flex justify-content-center gap-1">
-                                                    <a href="<?= base_url('mainincome/edit/1'); ?>" class="btn btn-warning btn-sm" title="Edit">
-                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <?php foreach ($mexpenses as $expense): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($expense['main_expense_name']) ?></td>
+                                                <td><?= htmlspecialchars($expense['comment']) ?></td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-warning btn-sm expenseeditBtn"
+                                                        data-id="<?= $expense['id'] ?>">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    <a href="<?= base_url('mainexpense/delete/' . $expense['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                        <i class="fa fa-trash"></i>
                                                     </a>
-                                                    <a href="<?= base_url('mainincome/delete/1'); ?>" class="btn btn-danger btn-sm" title="Delete">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <!-- Add dynamic rows here -->
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -81,8 +95,39 @@
         <?php include(APPPATH . 'views/components/footer.php'); ?>
         <script>
             $(document).ready(function() {
-                $('#mainIncomeTable').DataTable();
+                $('#mainexpenseTable').DataTable();
             });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('.expenseeditBtn').click(function() {
+                    const id = $(this).data('id');
+                    $.ajax({
+                        url: '<?= base_url("mainexpense/get_by_id/") ?>' + id,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#record_id').val(data.id);
+                            $('#expense_name').val(data.main_expense_name);
+                            $('#comment').val(data.comment);
+                            $('#submitText').text('Update');
+                            $('#expensesubmitBtn').removeClass('btn-success').addClass('btn-warning');
+                        },
+                        error: function() {
+                            alert('Error loading data!');
+                        }
+                    });
+                });
+            });
+
+            setTimeout(function() {
+                const alert = document.querySelector('.alert');
+                if (alert) {
+                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                    bsAlert.close();
+                }
+            }, 3000);
         </script>
     </div>
 </div>

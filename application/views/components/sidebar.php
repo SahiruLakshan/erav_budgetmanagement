@@ -28,10 +28,10 @@
                 </a>
                 <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= base_url('Expense/main'); ?>">Main Expenses</a>
+                        <a class="nav-link" href="<?= base_url('Mainexpense'); ?>">Main Expenses</a>
                     </nav>
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= base_url('Expense/sub'); ?>">Sub Expenses</a>
+                        <a class="nav-link" href="<?= base_url('Subexpense'); ?>">Sub Expenses</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseManage" aria-expanded="false" aria-controls="collapseManage">
@@ -55,7 +55,7 @@
                 </a>
                 <div class="collapse" id="collapseBank" aria-labelledby="headingFour" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= base_url('Bank/add'); ?>">Add Bank Account</a>
+                        <a class="nav-link" href="<?= base_url('bank'); ?>">Add Bank Account</a>
                     </nav>
                 </div>
                 <div class="sb-sidenav-menu-heading">User</div>

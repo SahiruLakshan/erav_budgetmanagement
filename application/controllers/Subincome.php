@@ -23,7 +23,8 @@ class Subincome extends CI_Controller
 
     public function add_or_update()
     {
-        $this->form_validation->set_rules('sub_income_name', 'Subincome Name', 'required');
+        $this->form_validation->set_rules('main_income_id', 'Mainincome', 'required');
+        $this->form_validation->set_rules('sub_income_name', 'Subincome', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors('<div class="text-white">', '</div>'));

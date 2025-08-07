@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="income_name" class="form-label fw-semibold">Sub Income Type <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control" id="sub_income_name" name="sub_income_name" required>
+                                        <input type="text" class="form-control form-control" id="sub_income_name" name="sub_income_name">
                                     </div>
                                     <div class="mb-3">
                                         <label for="comment" class="form-label fw-semibold">Comment</label>

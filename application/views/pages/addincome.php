@@ -12,6 +12,20 @@
                 </div>
                 <hr class="mb-4">
 
+                <?php if ($this->session->flashdata('success')): ?>
+                    <div class="alert alert-success bg-success text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('success') ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->session->flashdata('error')): ?>
+                    <div class="alert bg-danger text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('error') ?>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
                 <div class="row g-4">
                     <div class="col-12">
                         <div class="card shadow border-0">
@@ -20,7 +34,7 @@
                                 <span>Add Daily Income</span>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('dailyincome/add'); ?>" method="post">
+                                <form action="<?= base_url('Income/submit'); ?>" method="post">
                                     <div class="row g-3">
                                         <div class="col-md-4">
                                             <label for="main_income" class="form-label fw-semibold">Main Income Type <span class="text-danger">*</span></label>
@@ -51,16 +65,20 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="sub_income" class="form-label fw-semibold">Income Recived<span class="text-danger">*</span></label>
-                                            <select name="sub_income" id="sub_income" class="form-select" required>
+                                            <label for="sub_income" class="form-label fw-semibold">Select Bank (If you get money to bank)<span class="text-danger">*</span></label>
+                                            <select name="bank" id="bank" class="form-select" required>
                                                 <option value="">Select Payment Type</option>
                                                 <option value="1">To BOC Bank</option>
                                                 <option value="1">To Sampath Bank</option>
-                                                <option value="2">Get Money in Hand</option>
                                             </select>
                                         </div>
 
                                         <div class="col-md-4">
+                                            <label for="sub_income" class="form-label fw-semibold">Get Money in Hand (Select If you get money to hand)<span class="text-danger">*</span></label><br>
+                                            <input type="checkbox" name="get_money_in_hand" id="get_money_in_hand" class="form-check-input" value="1">
+                                        </div>
+
+                                        <div class="col-md-12">
                                             <label for="comment" class="form-label fw-semibold">Comment</label>
                                             <textarea name="comment" class="form-control" id="" placeholder="Optional note"></textarea>
                                         </div>
@@ -97,25 +115,24 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Salary</td>
-                                                <td>Job</td>
-                                                <td>2025-08-04</td>
-                                                <td>5000</td>
-                                                <td>Bank</td>
-                                                <td>August income</td>
-                                                <td class="text-center">
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="<?= base_url('dailyincome/edit/1'); ?>" class="btn btn-warning btn-sm" title="Edit">
-                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <?php foreach ($incomes as $income): ?>
+                                                <tr>
+                                                    <td><?= htmlspecialchars($bank['bank']) ?></td>
+                                                    <td><?= htmlspecialchars($bank['account_type']) ?></td>
+                                                    <td><?= htmlspecialchars($bank['account_number']) ?></td>
+                                                    <td><?= htmlspecialchars($bank['open_balance']) ?></td>
+                                                    <td><?= htmlspecialchars($bank['comment']) ?></td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-warning btn-sm bankeditBtn"
+                                                            data-id="<?= $bank['id'] ?>">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <a href="<?= base_url('bank/delete/' . $bank['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                            <i class="fa fa-trash"></i>
                                                         </a>
-                                                        <a href="<?= base_url('dailyincome/delete/1'); ?>" class="btn btn-danger btn-sm" title="Delete">
-                                                            <i class="fa-solid fa-trash"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <!-- End dynamic row -->
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
                                         </tbody>
                                     </table>
                                 </div>

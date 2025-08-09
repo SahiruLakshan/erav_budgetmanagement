@@ -41,10 +41,10 @@
                 </a>
                 <div class="collapse" id="collapseManage" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= base_url('Income/addincome'); ?>">Add Incomes</a>
+                        <a class="nav-link" href="<?= base_url('Income'); ?>">Add Incomes</a>
                     </nav>
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= base_url('Expense/addexpense'); ?>">Add Expenses</a>
+                        <a class="nav-link" href="<?= base_url('Expense'); ?>">Add Expenses</a>
                     </nav>
                 </div>
                 <div class="sb-sidenav-menu-heading">Bank Details</div>

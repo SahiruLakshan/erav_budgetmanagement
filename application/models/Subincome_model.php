@@ -25,4 +25,12 @@ class Subincome_model extends CI_Model
     public function delete($id, $data) {
         return $this->db->where('id', $id)->update('sub_income_types', $data);
     }
+
+    public function get_by_main_income($main_income_id)
+    {
+        return $this->db->where('tbl_main_income_types_id', $main_income_id)
+                        ->where('status', 1) 
+                        ->get('sub_income_types')
+                        ->result();
+    }
 }

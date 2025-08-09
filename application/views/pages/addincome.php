@@ -34,23 +34,29 @@
                                 <span>Add Daily Income</span>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('Income/submit'); ?>" method="post">
+                                <form action="<?= base_url('Income/add_or_update'); ?>" method="post">
+                                    <input type="hidden" id="record_id" name="record_id">
                                     <div class="row g-3">
                                         <div class="col-md-4">
-                                            <label for="main_income" class="form-label fw-semibold">Main Income Type <span class="text-danger">*</span></label>
+                                            <label for="main_income" class="form-label fw-semibold">
+                                                Main Income Type <span class="text-danger">*</span>
+                                            </label>
                                             <select name="main_income" id="main_income" class="form-select" required>
                                                 <option value="">Select Main Income Type</option>
-                                                <option value="1">Salary</option>
-                                                <option value="2">Business</option>
+                                                <?php foreach ($mincomes as $income): ?>
+                                                    <option value="<?= $income['id'] ?>" <?= (isset($incomes) && $incomes['tbl_main_income_types_id'] == $income['id']) ? 'selected' : '' ?>>
+                                                        <?= $income['income_name'] ?>
+                                                    </option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="sub_income" class="form-label fw-semibold">Sub Income Type <span class="text-danger">*</span></label>
+                                            <label for="sub_income" class="form-label fw-semibold">
+                                                Sub Income Type <span class="text-danger">*</span>
+                                            </label>
                                             <select name="sub_income" id="sub_income" class="form-select" required>
                                                 <option value="">Select Sub Income Type</option>
-                                                <option value="1">Job</option>
-                                                <option value="2">Freelance</option>
                                             </select>
                                         </div>
 
@@ -61,15 +67,16 @@
 
                                         <div class="col-md-4">
                                             <label for="amount" class="form-label fw-semibold">Amount <span class="text-danger">*</span></label>
-                                            <input type="number" name="amount" id="amount" class="form-control" placeholder="Enter income amount" required>
+                                            <input type="number" name="amount" id="amount" class="form-control" placeholder="Enter income amount" min="1" required>
                                         </div>
 
                                         <div class="col-md-4">
                                             <label for="sub_income" class="form-label fw-semibold">Select Bank (If you get money to bank)<span class="text-danger">*</span></label>
-                                            <select name="bank" id="bank" class="form-select" required>
-                                                <option value="">Select Payment Type</option>
-                                                <option value="1">To BOC Bank</option>
-                                                <option value="1">To Sampath Bank</option>
+                                            <select name="bank" id="bank" class="form-select">
+                                                <option value="">Select Bank</option>
+                                                <?php foreach ($banks as $bank): ?>
+                                                    <option value="<?= $bank['id'] ?>"><?= $bank['bank'] ?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
 
@@ -80,13 +87,13 @@
 
                                         <div class="col-md-12">
                                             <label for="comment" class="form-label fw-semibold">Comment</label>
-                                            <textarea name="comment" class="form-control" id="" placeholder="Optional note"></textarea>
+                                            <textarea name="comment" class="form-control" id="comment" placeholder="Optional note"></textarea>
                                         </div>
                                     </div>
 
                                     <div class="mt-4">
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fa-solid fa-save me-2"></i>Save Daily Income
+                                        <button id="submitBtn" type="submit" class="btn btn-success">
+                                            <i class="fa-solid fa-save me-2"></i><span id="submitText">Save</span>
                                         </button>
                                     </div>
                                 </form>
@@ -115,19 +122,25 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($incomes as $income): ?>
+                                            <?php foreach ($addedincomes as $income): ?>
                                                 <tr>
-                                                    <td><?= htmlspecialchars($bank['bank']) ?></td>
-                                                    <td><?= htmlspecialchars($bank['account_type']) ?></td>
-                                                    <td><?= htmlspecialchars($bank['account_number']) ?></td>
-                                                    <td><?= htmlspecialchars($bank['open_balance']) ?></td>
-                                                    <td><?= htmlspecialchars($bank['comment']) ?></td>
+                                                    <td><?= htmlspecialchars($income['main_income_name']) ?></td>
+                                                    <td><?= htmlspecialchars($income['sub_income_name']) ?></td>
+                                                    <td><?= htmlspecialchars($income['date']) ?></td>
+                                                    <td><?= htmlspecialchars($income['amount']) ?></td>
+                                                    <td>
+                                                        <?php if ($income['tbl_banks_id']): ?>
+                                                            <?= htmlspecialchars($income['bank_name']) ?>
+                                                        <?php else: ?>
+                                                            <span class="text-danger">Money in Hand</span>
+                                                        <?php endif; ?>
+                                                    <td><?= htmlspecialchars($income['comment']) ?></td>
                                                     <td class="text-center">
-                                                        <button type="button" class="btn btn-warning btn-sm bankeditBtn"
-                                                            data-id="<?= $bank['id'] ?>">
+                                                        <button type="button" class="btn btn-warning btn-sm editBtn"
+                                                            data-id="<?= $income['id'] ?>">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <a href="<?= base_url('bank/delete/' . $bank['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                        <a href="<?= base_url('income/delete/' . $income['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -138,19 +151,102 @@
                                 </div>
                             </div>
                         </div>
-                    </div> <!-- end col -->
+                    </div>
                 </div>
             </div>
         </main>
 
         <?php include(APPPATH . 'views/components/footer.php'); ?>
 
-        <!-- DataTable + ScrollX -->
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 $('#dailyIncomeTable').DataTable({
                     scrollX: true
                 });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('#main_income').change(function() {
+                    var main_income_id = $(this).val();
+
+                    if (main_income_id) {
+                        $.ajax({
+                            url: "<?= base_url('income/get_sub_income') ?>",
+                            type: "POST",
+                            data: {
+                                main_income_id: main_income_id
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                $('#sub_income').empty().append('<option value="">Select Sub Income Type</option>');
+                                $.each(data, function(index, item) {
+                                    $('#sub_income').append('<option value="' + item.id + '">' + item.sub_income_name + '</option>');
+                                });
+                            }
+                        });
+                    } else {
+                        $('#sub_income').empty().append('<option value="">Select Sub Income Type</option>');
+                    }
+                });
+
+                $('.editBtn').click(function() {
+                    const id = $(this).data('id');
+
+                    $.ajax({
+                        url: '<?= base_url("income/get_by_id/") ?>' + id,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#record_id').val(data.id);
+                            $('#date').val(data.date);
+                            $('#amount').val(data.amount);
+                            $('#comment').val(data.comment);
+                            if (data.tbl_banks_id) {
+                                $('#bank').val(data.tbl_banks_id);
+                                $('#get_money_in_hand').prop('checked', false);
+                            } else {
+                                $('#bank').val('');
+                                $('#get_money_in_hand').prop('checked', data.to_hand == 1);
+                            }
+                            $('#submitText').text('Update');
+                            $('#submitBtn').removeClass('btn-success').addClass('btn-warning');
+                            $('#main_income').val(data.tbl_main_income_types_id).trigger('change');
+
+                            $.ajax({
+                                url: "<?= base_url('income/get_sub_income') ?>",
+                                type: "POST",
+                                data: {
+                                    main_income_id: data.tbl_main_income_types_id
+                                },
+                                dataType: "json",
+                                success: function(subData) {
+                                    $('#sub_income').empty().append('<option value="">Select Sub Income Type</option>');
+                                    $.each(subData, function(index, item) {
+                                        $('#sub_income').append('<option value="' + item.id + '">' + item.sub_income_name + '</option>');
+                                    });
+                                    $('#sub_income').val(data.tbl_sub_income_types_id);
+                                },
+                                error: function() {
+                                    console.log('Error loading sub income data');
+                                }
+                            });
+                        },
+                        error: function() {
+                            alert('Error loading data!');
+                        }
+                    });
+                });
+
+
+                setTimeout(function() {
+                    const alert = document.querySelector('.alert');
+                    if (alert) {
+                        const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                        bsAlert.close();
+                    }
+                }, 3000);
             });
         </script>
     </div>

@@ -12,6 +12,20 @@
                 </div>
                 <hr class="mb-4">
 
+                <?php if ($this->session->flashdata('success')): ?>
+                    <div class="alert alert-success bg-success text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('success') ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->session->flashdata('error')): ?>
+                    <div class="alert bg-danger text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('error') ?>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
                 <div class="row g-4">
                     <div class="col-12">
                         <div class="card shadow border-0">
@@ -20,11 +34,12 @@
                                 <span>Add Daily Expenses</span>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('dailyincome/add'); ?>" method="post">
+                                <form action="<?= base_url('Expense/add_or_update'); ?>" method="post">
+                                    <input type="hidden" id="record_id" name="record_id">
                                     <div class="row g-3">
                                         <div class="col-md-4">
                                             <label for="main_income" class="form-label fw-semibold">Main Expense Type <span class="text-danger">*</span></label>
-                                            <select name="main_income" id="main_income" class="form-select" required>
+                                            <select name="main_expense" id="main_expense" class="form-select" required>
                                                 <option value="">Select Main Expense Type</option>
                                                 <option value="1">Shopping</option>
                                             </select>
@@ -32,7 +47,7 @@
 
                                         <div class="col-md-4">
                                             <label for="sub_income" class="form-label fw-semibold">Sub Expense Type <span class="text-danger">*</span></label>
-                                            <select name="sub_income" id="sub_income" class="form-select" required>
+                                            <select name="sub_expense" id="sub_expense" class="form-select" required>
                                                 <option value="">Select Sub Expense Type</option>
                                             </select>
                                         </div>
@@ -48,18 +63,23 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="sub_income" class="form-label fw-semibold">Expense From<span class="text-danger">*</span></label>
-                                            <select name="sub_income" id="sub_income" class="form-select" required>
-                                                <option value="">Select Payment Type</option>
-                                                <option value="1">BOC Bank</option>
-                                                <option value="1">Sampath Bank</option>
-                                                <option value="2">oney in Hand</option>
+                                            <label for="sub_income" class="form-label fw-semibold">Select Bank (If you spend money to bank)</label>
+                                            <select name="bank" id="bank" class="form-select">
+                                                <option value="">Select Bank</option>
+                                                <?php foreach ($banks as $bank): ?>
+                                                    <option value="<?= $bank['id'] ?>"><?= $bank['bank'] ?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
 
                                         <div class="col-md-4">
+                                            <label for="sub_income" class="form-label fw-semibold">Spend Money from Hand (Select If you spend money from hand)</label><br>
+                                            <input type="checkbox" name="spend_money_from_hand" id="spend_money_from_hand" class="form-check-input" value="1">
+                                        </div>
+
+                                        <div class="col-md-12">
                                             <label for="comment" class="form-label fw-semibold">Comment</label>
-                                            <textarea name="comment" class="form-control" id="" placeholder="Optional note"></textarea>
+                                            <textarea name="comment" class="form-control" id="comment" placeholder="Optional note"></textarea>
                                         </div>
                                     </div>
 

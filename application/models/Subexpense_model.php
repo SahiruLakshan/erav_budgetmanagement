@@ -25,4 +25,12 @@ class Subexpense_model extends CI_Model
     public function delete($id, $data) {
         return $this->db->where('id', $id)->update('sub_expense_types', $data);
     }
+
+    public function get_by_main_expense($main_expense_id)
+    {
+        return $this->db->where('tbl_main_expense_types_id', $main_expense_id)
+                        ->where('status', 1) 
+                        ->get('sub_expense_types')
+                        ->result();
+    }
 }

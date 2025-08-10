@@ -71,7 +71,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="sub_income" class="form-label fw-semibold">Select Bank (If you get money to bank)<span class="text-danger">*</span></label>
+                                            <label for="sub_income" class="form-label fw-semibold">Select Bank (If you get money to bank)</label>
                                             <select name="bank" id="bank" class="form-select">
                                                 <option value="">Select Bank</option>
                                                 <?php foreach ($banks as $bank): ?>
@@ -81,7 +81,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="sub_income" class="form-label fw-semibold">Get Money in Hand (Select If you get money to hand)<span class="text-danger">*</span></label><br>
+                                            <label for="sub_income" class="form-label fw-semibold">Get Money in Hand (Select If you get money to hand)</label><br>
                                             <input type="checkbox" name="get_money_in_hand" id="get_money_in_hand" class="form-check-input" value="1">
                                         </div>
 

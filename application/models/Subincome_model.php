@@ -6,7 +6,8 @@ class Subincome_model extends CI_Model
         $this->db->from('sub_income_types');
         $this->db->join('main_income_types', 'sub_income_types.tbl_main_income_types_id = main_income_types.id', 'left');
         $this->db->order_by('sub_income_types.id', 'DESC');
-        $this->db->where('sub_income_types.status', '1'); 
+        $this->db->where('sub_income_types.status', '1');
+        $this->db->where('sub_income_types.tbl_user_id', $this->session->userdata('user_id'));
         return $this->db->get()->result_array();
     }
 

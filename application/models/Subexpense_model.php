@@ -6,7 +6,8 @@ class Subexpense_model extends CI_Model
         $this->db->from('sub_expense_types');
         $this->db->join('main_expense_types', 'sub_expense_types.tbl_main_expense_types_id = main_expense_types.id', 'left');
         $this->db->order_by('sub_expense_types.id', 'DESC');
-        $this->db->where('sub_expense_types.status', '1'); 
+        $this->db->where('sub_expense_types.status', '1');
+        $this->db->where('sub_expense_types.tbl_user_id', $this->session->userdata('user_id')); 
         return $this->db->get()->result_array();
     }
 

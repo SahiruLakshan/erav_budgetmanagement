@@ -11,6 +11,7 @@ class Income_model extends CI_Model
         $this->db->join('banks b', 'i.tbl_banks_id = b.id', 'left');
         $this->db->order_by('i.id', 'DESC');
         $this->db->where('i.status', '1');
+        $this->db->where('i.tbl_user_id', $this->session->userdata('user_id'));
         return $this->db->get()->result_array();
     }
 

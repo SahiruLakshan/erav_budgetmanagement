@@ -57,44 +57,44 @@ class Expense extends CI_Controller
         $date = $this->input->post('date');
         $amount = $this->input->post('amount');
         $bank = !empty($this->input->post('bank')) ? $this->input->post('bank') : null;
-        $get_money_in_hand = !empty($this->input->post('get_money_in_hand')) ? 1 : 0;
+        $spend_money_from_hand = !empty($this->input->post('spend_money_from_hand')) ? 1 : 0;
         $comment = $this->input->post('comment');
         $user_id = $this->session->userdata('user_id');
 
         $data = [
-            'tbl_main_income_types_id' => $main_income,
-            'tbl_sub_income_types_id' => $sub_income,
+            'tbl_main_expense_types_id' => $main_expense,
+            'tbl_sub_expense_types_id' => $sub_expense,
             'date' => $date,
             'amount' => $amount,
             'tbl_banks_id' => $bank,
-            'to_hand' => $get_money_in_hand,
+            'from_hand' => $spend_money_from_hand,
             'comment' => $comment,
             'tbl_user_id' => $user_id,
             'status' => 1
         ];
 
         if ($id) {
-            $this->Income_model->update($id, $data);
+            $this->Expense_model->update($id, $data);
             $this->session->set_flashdata('success', 'Record updated successfully.');
         } else {
-            $this->Income_model->insert($data);
+            $this->Expense_model->insert($data);
             $this->session->set_flashdata('success', 'Record added successfully.');
         }
 
-        redirect('income');
+        redirect('expense');
     }
 
     public function get_by_id($id)
     {
-        $data = $this->Income_model->get_by_id($id);
+        $data = $this->Expense_model->get_by_id($id);
         echo json_encode($data);
     }
 
     public function delete($id)
     {
         $data['status'] = 0;
-        $this->Income_model->delete($id, $data);
+        $this->Expense_model->delete($id, $data);
         $this->session->set_flashdata('success', 'Record deleted successfully.');
-        redirect('income');
+        redirect('expense');
     }
 }

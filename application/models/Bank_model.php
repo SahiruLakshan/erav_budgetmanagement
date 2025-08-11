@@ -5,7 +5,7 @@ class Bank_model extends CI_Model
     private $table = 'banks';
 
     public function get_all() {
-        return $this->db->order_by('id', 'DESC')->where('status', '1')->get($this->table)->result_array();
+        return $this->db->order_by('id', 'DESC')->where('status', '1')->where('tbl_user_id', $this->session->userdata('user_id'))->get($this->table)->result_array();
     }
 
     public function insert($data) {

@@ -38,15 +38,19 @@
                                     <input type="hidden" id="record_id" name="record_id">
                                     <div class="row g-3">
                                         <div class="col-md-4">
-                                            <label for="main_income" class="form-label fw-semibold">Main Expense Type <span class="text-danger">*</span></label>
+                                            <label for="" class="form-label fw-semibold">Main Expense Type <span class="text-danger">*</span></label>
                                             <select name="main_expense" id="main_expense" class="form-select" required>
                                                 <option value="">Select Main Expense Type</option>
-                                                <option value="1">Shopping</option>
+                                                <?php foreach ($mexpenses as $expense): ?>
+                                                <option value="<?= $expense['id'] ?>" <?= (isset($expenses) && $expenses['tbl_main_expense_types_id'] == $expense['id']) ? 'selected' : '' ?>>
+                                                    <?= $expense['main_expense_name'] ?>
+                                                </option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="sub_income" class="form-label fw-semibold">Sub Expense Type <span class="text-danger">*</span></label>
+                                            <label for="" class="form-label fw-semibold">Sub Expense Type <span class="text-danger">*</span></label>
                                             <select name="sub_expense" id="sub_expense" class="form-select" required>
                                                 <option value="">Select Sub Expense Type</option>
                                             </select>
@@ -84,8 +88,8 @@
                                     </div>
 
                                     <div class="mt-4">
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fa-solid fa-save me-2"></i>Save Daily Income
+                                        <button id="submitBtn" type="submit" class="btn btn-success">
+                                            <i class="fa-solid fa-save me-2"></i><span id="submitText">Save</span>
                                         </button>
                                     </div>
                                 </form>
@@ -114,25 +118,30 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Salary</td>
-                                                <td>Job</td>
-                                                <td>2025-08-04</td>
-                                                <td>5000</td>
-                                                <td>Bank</td>
-                                                <td>August income</td>
-                                                <td class="text-center">
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="<?= base_url('dailyincome/edit/1'); ?>" class="btn btn-warning btn-sm" title="Edit">
-                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <?php foreach ($addedexpenses as $expense): ?>
+                                                <tr>
+                                                    <td><?= htmlspecialchars($expense['main_expense_name']) ?></td>
+                                                    <td><?= htmlspecialchars($expense['sub_expense_name']) ?></td>
+                                                    <td><?= htmlspecialchars($expense['date']) ?></td>
+                                                    <td><?= htmlspecialchars($expense['amount']) ?></td>
+                                                    <td>
+                                                        <?php if ($expense['tbl_banks_id']): ?>
+                                                            <?= htmlspecialchars($expense['bank_name']) ?>
+                                                        <?php else: ?>
+                                                            <span class="text-danger">Money From Hand</span>
+                                                        <?php endif; ?>
+                                                    <td><?= htmlspecialchars($expense['comment']) ?></td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-warning btn-sm editBtn"
+                                                            data-id="<?= $expense['id'] ?>">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <a href="<?= base_url('expense/delete/' . $expense['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                            <i class="fa fa-trash"></i>
                                                         </a>
-                                                        <a href="<?= base_url('dailyincome/delete/1'); ?>" class="btn btn-danger btn-sm" title="Delete">
-                                                            <i class="fa-solid fa-trash"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <!-- End dynamic row -->
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -151,6 +160,90 @@
                 $('#dailyIncomeTable').DataTable({
                     scrollX: true
                 });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('#main_expense').change(function() {
+                    var main_expense_id = $(this).val();
+
+                    if (main_expense_id) {
+                        $.ajax({
+                            url: "<?= base_url('expense/get_sub_expense') ?>",
+                            type: "POST",
+                            data: {
+                                main_expense_id: main_expense_id
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                $('#sub_expense').empty().append('<option value="">Select Sub Expense Type</option>');
+                                $.each(data, function(index, item) {
+                                    $('#sub_expense').append('<option value="' + item.id + '">' + item.sub_expense_name + '</option>');
+                                });
+                            }
+                        });
+                    } else {
+                        $('#sub_expense').empty().append('<option value="">Select Sub Income Type</option>');
+                    }
+                });
+
+                $('.editBtn').click(function() {
+                    const id = $(this).data('id');
+
+                    $.ajax({
+                        url: '<?= base_url("expense/get_by_id/") ?>' + id,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#record_id').val(data.id);
+                            $('#date').val(data.date);
+                            $('#amount').val(data.amount);
+                            $('#comment').val(data.comment);
+                            if (data.tbl_banks_id) {
+                                $('#bank').val(data.tbl_banks_id);
+                                $('#spend_money_from_hand').prop('checked', false);
+                            } else {
+                                $('#bank').val('');
+                                $('#spend_money_from_hand').prop('checked', data.from_hand == 1);
+                            }
+                            $('#submitText').text('Update');
+                            $('#submitBtn').removeClass('btn-success').addClass('btn-warning');
+                            $('#main_expense').val(data.tbl_main_expense_types_id).trigger('change');
+
+                            $.ajax({
+                                url: "<?= base_url('expense/get_sub_expense') ?>",
+                                type: "POST",
+                                data: {
+                                    main_expense_id: data.tbl_main_expense_types_id
+                                },
+                                dataType: "json",
+                                success: function(subData) {
+                                    $('#sub_expense').empty().append('<option value="">Select Sub Expense Type</option>');
+                                    $.each(subData, function(index, item) {
+                                        $('#sub_expense').append('<option value="' + item.id + '">' + item.sub_expense_name + '</option>');
+                                    });
+                                    $('#sub_expense').val(data.tbl_sub_expense_types_id);
+                                },
+                                error: function() {
+                                    console.log('Error loading sub expense data');
+                                }
+                            });
+                        },
+                        error: function() {
+                            alert('Error loading data!');
+                        }
+                    });
+                });
+
+
+                setTimeout(function() {
+                    const alert = document.querySelector('.alert');
+                    if (alert) {
+                        const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                        bsAlert.close();
+                    }
+                }, 3000);
             });
         </script>
     </div>

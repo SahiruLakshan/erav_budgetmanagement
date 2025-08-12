@@ -25,7 +25,7 @@ class Mainincome extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors('<div class="text-white">', '</div>'));
-            redirect('mainincome');
+            redirect('Mainincome');
         }
 
         $id = $this->input->post('record_id');
@@ -48,7 +48,7 @@ class Mainincome extends CI_Controller
             $this->session->set_flashdata('success', 'Record added successfully.');
         }
 
-        redirect('mainincome');
+        redirect('Mainincome');
     }
 
 
@@ -63,6 +63,6 @@ class Mainincome extends CI_Controller
         $data['status'] = 0;
         $this->Mainincome_model->delete($id, $data);
         $this->session->set_flashdata('success', 'Record deleted successfully.');
-        redirect('mainincome');
+        redirect('Mainincome');
     }
 }

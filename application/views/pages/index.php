@@ -97,10 +97,8 @@
                                                     <td><?= $t['comment'] ?? ''; ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php else: ?>
-                                            <tr>
-                                                <td colspan="7" class="text-center text-muted">No transactions found.</td>
-                                            </tr>
+                                            >
+
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
@@ -202,7 +200,7 @@
                     });
                 });
 
-            fetch("<?= base_url('dashboard/get_yearly_profit_data') ?>")
+            fetch("<?= base_url('Dashboard/get_yearly_profit_data') ?>")
                 .then(response => response.json())
                 .then(data => {
                     const labels = data.map(item => item.month);
@@ -234,16 +232,20 @@
         <script>
             $(document).ready(function() {
                 $('#transactionsTable').DataTable({
-                    "order": [
+                    order: [
                         [0, "desc"]
                     ],
-                    "pageLength": 10,
-                    "columnDefs": [{
-                        "orderable": false,
-                        "targets": 6
-                    }]
+                    pageLength: 10,
+                    columnDefs: [{
+                        orderable: false,
+                        targets: 6
+                    }],
+                    language: {
+                        emptyTable: '<span class="text-danger fw-bold">⚠ No transactions found!</span>'
+                    }
                 });
             });
+
             document.getElementById('viewTransactionsBtn').addEventListener('click', function(e) {
                 e.preventDefault();
                 document.getElementById('transactionsTable').scrollIntoView({

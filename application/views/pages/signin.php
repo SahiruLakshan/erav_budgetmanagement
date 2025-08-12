@@ -39,7 +39,7 @@
                     <button type="submit" class="btn btn-dark">Sign In</button>
                 </div>
                 <p class="text-center mt-3 mb-0">
-                    Don't have an account? <a href="<?= base_url('auth/signup') ?>" class="text-secondary">Sign Up</a>
+                    Don't have an account? <a href="<?= base_url('Auth/signup') ?>" class="text-secondary">Sign Up</a>
                 </p>
             </form>
         </div>

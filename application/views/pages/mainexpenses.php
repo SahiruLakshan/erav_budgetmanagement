@@ -34,7 +34,7 @@
                                 <span>Add Main Expense Type</span>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('mainexpense/add_or_update'); ?>" method="post">
+                                <form action="<?= base_url('Mainexpense/add_or_update'); ?>" method="post">
                                     <input type="hidden" id="record_id" name="record_id">
                                     <div class="mb-3">
                                         <label for="income_name" class="form-label fw-semibold">Expense Type <span class="text-danger">*</span></label>
@@ -77,7 +77,7 @@
                                                         data-id="<?= $expense['id'] ?>">
                                                         <i class="fa fa-edit"></i>
                                                     </button>
-                                                    <a href="<?= base_url('mainexpense/delete/' . $expense['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                    <a href="<?= base_url('Mainexpense/delete/' . $expense['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
@@ -104,7 +104,7 @@
                 $('.expenseeditBtn').click(function() {
                     const id = $(this).data('id');
                     $.ajax({
-                        url: '<?= base_url("mainexpense/get_by_id/") ?>' + id,
+                        url: '<?= base_url("Mainexpense/get_by_id/") ?>' + id,
                         method: 'GET',
                         dataType: 'json',
                         success: function(data) {

@@ -25,7 +25,7 @@ class Mainexpense extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors('<div class="text-white">', '</div>'));
-            redirect('mainexpense');
+            redirect('Mainexpense');
         }
 
         $id = $this->input->post('record_id');
@@ -48,7 +48,7 @@ class Mainexpense extends CI_Controller
             $this->session->set_flashdata('success', 'Record added successfully.');
         }
 
-        redirect('mainexpense');
+        redirect('Mainexpense');
     }
 
 
@@ -63,6 +63,6 @@ class Mainexpense extends CI_Controller
         $data['status'] = 0;
         $this->Mainexpense_model->delete($id, $data);
         $this->session->set_flashdata('success', 'Record deleted successfully.');
-        redirect('mainexpense');
+        redirect('Mainexpense');
     }
 }

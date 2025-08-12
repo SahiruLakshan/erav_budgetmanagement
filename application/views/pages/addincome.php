@@ -140,7 +140,7 @@
                                                             data-id="<?= $income['id'] ?>">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <a href="<?= base_url('income/delete/' . $income['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                        <a href="<?= base_url('Income/delete/' . $income['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -173,7 +173,7 @@
 
                     if (main_income_id) {
                         $.ajax({
-                            url: "<?= base_url('income/get_sub_income') ?>",
+                            url: "<?= base_url('Income/get_sub_income') ?>",
                             type: "POST",
                             data: {
                                 main_income_id: main_income_id
@@ -195,7 +195,7 @@
                     const id = $(this).data('id');
 
                     $.ajax({
-                        url: '<?= base_url("income/get_by_id/") ?>' + id,
+                        url: '<?= base_url("Income/get_by_id/") ?>' + id,
                         method: 'GET',
                         dataType: 'json',
                         success: function(data) {
@@ -215,7 +215,7 @@
                             $('#main_income').val(data.tbl_main_income_types_id).trigger('change');
 
                             $.ajax({
-                                url: "<?= base_url('income/get_sub_income') ?>",
+                                url: "<?= base_url('Income/get_sub_income') ?>",
                                 type: "POST",
                                 data: {
                                     main_income_id: data.tbl_main_income_types_id

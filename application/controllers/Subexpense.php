@@ -28,7 +28,7 @@ class Subexpense extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors('<div class="text-white">', '</div>'));
-            redirect('subexpense');
+            redirect('Subexpense');
         }
 
         $id = $this->input->post('record_id');
@@ -53,7 +53,7 @@ class Subexpense extends CI_Controller
             $this->session->set_flashdata('success', 'Record added successfully.');
         }
 
-        redirect('subexpense');
+        redirect('Subexpense');
     }
 
 
@@ -68,6 +68,6 @@ class Subexpense extends CI_Controller
         $data['status'] = 0; 
         $this->Subexpense_model->delete($id, $data);
         $this->session->set_flashdata('success', 'Record deleted successfully.');
-        redirect('subexpense');
+        redirect('Subexpense');
     }
 }

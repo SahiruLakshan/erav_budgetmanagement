@@ -34,7 +34,7 @@
                                 <span>Add Main Income Type</span>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('mainincome/add_or_update'); ?>" method="post">
+                                <form action="<?= base_url('Mainincome/add_or_update'); ?>" method="post">
                                     <input type="hidden" id="record_id" name="record_id">
                                     <div class="mb-3">
                                         <label for="income_name">Income Type <span class="text-danger">*</span></label>
@@ -77,7 +77,7 @@
                                                         data-id="<?= $income['id'] ?>">
                                                         <i class="fa fa-edit"></i>
                                                     </button>
-                                                    <a href="<?= base_url('mainincome/delete/' . $income['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                    <a href="<?= base_url('Mainincome/delete/' . $income['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
@@ -104,7 +104,7 @@
                 $('.editBtn').click(function() {
                     const id = $(this).data('id');
                     $.ajax({
-                        url: '<?= base_url("mainincome/get_by_id/") ?>' + id,
+                        url: '<?= base_url("Mainincome/get_by_id/") ?>' + id,
                         method: 'GET',
                         dataType: 'json',
                         success: function(data) {

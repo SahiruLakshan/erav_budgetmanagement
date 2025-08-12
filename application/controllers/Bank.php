@@ -28,7 +28,7 @@ class Bank extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors('<div class="text-white">', '</div>'));
-            redirect('bank');
+            redirect('Bank');
         }
 
         $id = $this->input->post('record_id');
@@ -57,7 +57,7 @@ class Bank extends CI_Controller
             $this->session->set_flashdata('success', 'Record added successfully.');
         }
 
-        redirect('bank');
+        redirect('Bank');
     }
 
     public function get_by_id($id)
@@ -71,6 +71,6 @@ class Bank extends CI_Controller
         $data['status'] = 0;
         $this->Bank_model->delete($id, $data);
         $this->session->set_flashdata('success', 'Record deleted successfully.');
-        redirect('bank');
+        redirect('Bank');
     }
 }

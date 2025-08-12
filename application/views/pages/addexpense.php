@@ -136,7 +136,7 @@
                                                             data-id="<?= $expense['id'] ?>">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <a href="<?= base_url('expense/delete/' . $expense['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                        <a href="<?= base_url('Expense/delete/' . $expense['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -170,7 +170,7 @@
 
                     if (main_expense_id) {
                         $.ajax({
-                            url: "<?= base_url('expense/get_sub_expense') ?>",
+                            url: "<?= base_url('Expense/get_sub_expense') ?>",
                             type: "POST",
                             data: {
                                 main_expense_id: main_expense_id
@@ -192,7 +192,7 @@
                     const id = $(this).data('id');
 
                     $.ajax({
-                        url: '<?= base_url("expense/get_by_id/") ?>' + id,
+                        url: '<?= base_url("Expense/get_by_id/") ?>' + id,
                         method: 'GET',
                         dataType: 'json',
                         success: function(data) {
@@ -212,7 +212,7 @@
                             $('#main_expense').val(data.tbl_main_expense_types_id).trigger('change');
 
                             $.ajax({
-                                url: "<?= base_url('expense/get_sub_expense') ?>",
+                                url: "<?= base_url('Expense/get_sub_expense') ?>",
                                 type: "POST",
                                 data: {
                                     main_expense_id: data.tbl_main_expense_types_id

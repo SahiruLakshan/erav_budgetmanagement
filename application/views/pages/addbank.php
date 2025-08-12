@@ -34,7 +34,7 @@
                                 <span>Add Bank Accounts</span>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('bank/add_or_update'); ?>" method="post">
+                                <form action="<?= base_url('Bank/add_or_update'); ?>" method="post">
                                     <input type="hidden" id="record_id" name="record_id">
                                     <div class="mb-3">
                                         <label for="" class="form-label fw-semibold">Bank <span class="text-danger">*</span></label>
@@ -110,7 +110,7 @@
                                                             data-id="<?= $bank['id'] ?>">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <a href="<?= base_url('bank/delete/' . $bank['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                        <a href="<?= base_url('Bank/delete/' . $bank['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -139,7 +139,7 @@
                 $('.bankeditBtn').click(function() {
                     const id = $(this).data('id');
                     $.ajax({
-                        url: '<?= base_url("bank/get_by_id/") ?>' + id,
+                        url: '<?= base_url("Bank/get_by_id/") ?>' + id,
                         method: 'GET',
                         dataType: 'json',
                         success: function(data) {

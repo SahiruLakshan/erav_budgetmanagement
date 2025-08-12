@@ -12,7 +12,7 @@ class Dashboard extends CI_Controller
         $this->load->model('Dashboard_model');
 
         if (!$this->session->userdata('user_id')) {
-            redirect('auth');
+            redirect('Auth');
         }
     }
 

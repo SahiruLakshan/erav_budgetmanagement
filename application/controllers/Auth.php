@@ -37,7 +37,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('validation_errors', validation_errors());
-            redirect('auth/signup');
+            redirect('Auth/signup');
         } else {
             $data = array(
                 'name' => $this->input->post('name'),
@@ -48,10 +48,10 @@ class Auth extends CI_Controller
 
             if ($this->User->insert_user($data)) {
                 $this->session->set_flashdata('success', 'Registration successful! You can now sign in.');
-                redirect('auth');
+                redirect('Auth');
             } else {
                 $this->session->set_flashdata('error', 'There was an error registering your account. Please try again.');
-                redirect('auth/signup');
+                redirect('Auth/signup');
             }
         }
     }
@@ -66,10 +66,10 @@ class Auth extends CI_Controller
         if ($user && password_verify($password, $user['password'])) {
             $this->session->set_userdata('user_id', $user['id']);
             $this->session->set_userdata('user_name', $user['name']);
-            redirect('dashboard');
+            redirect('Dashboard');
         } else {
             $this->session->set_flashdata('error', 'Invalid email or password.');
-            redirect('auth');
+            redirect('Auth');
         }
     }
 
@@ -78,6 +78,6 @@ class Auth extends CI_Controller
         $this->session->unset_userdata('user_id');
         $this->session->unset_userdata('user_name');
         $this->session->sess_destroy();
-        redirect('auth');
+        redirect('Auth');
     }
 }

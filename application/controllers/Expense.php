@@ -48,7 +48,7 @@ class Expense extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors('<div class="text-white">', '</div>'));
-            redirect('expense');
+            redirect('Expense');
         }
 
         $id = $this->input->post('record_id');
@@ -81,7 +81,7 @@ class Expense extends CI_Controller
             $this->session->set_flashdata('success', 'Record added successfully.');
         }
 
-        redirect('expense');
+        redirect('Expense');
     }
 
     public function get_by_id($id)
@@ -95,6 +95,6 @@ class Expense extends CI_Controller
         $data['status'] = 0;
         $this->Expense_model->delete($id, $data);
         $this->session->set_flashdata('success', 'Record deleted successfully.');
-        redirect('expense');
+        redirect('Expense');
     }
 }

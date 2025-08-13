@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Dashboard_model extends CI_Model
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -11,7 +10,14 @@ class Dashboard_model extends CI_Model
 
     public function get_balances()
     {
-        $banks = $this->db->get('banks')->result_array();
+        $user_id = $this->session->userdata('user_id');
+
+        $banks = $this->db
+            ->where('status', 1)
+            ->where('tbl_user_id', $user_id)
+            ->get('banks')
+            ->result_array();
+
         $total_bank_balance = 0;
 
         foreach ($banks as &$bank) {
@@ -19,6 +25,8 @@ class Dashboard_model extends CI_Model
                 ->select_sum('amount')
                 ->where('tbl_banks_id', $bank['id'])
                 ->where('to_hand', 0)
+                ->where('status', 1)
+                ->where('tbl_user_id', $user_id)
                 ->get('incomes')
                 ->row()->amount ?? 0;
 
@@ -26,6 +34,8 @@ class Dashboard_model extends CI_Model
                 ->select_sum('amount')
                 ->where('tbl_banks_id', $bank['id'])
                 ->where('from_hand', 0)
+                ->where('status', 1)
+                ->where('tbl_user_id', $user_id)
                 ->get('expenses')
                 ->row()->amount ?? 0;
 
@@ -37,12 +47,16 @@ class Dashboard_model extends CI_Model
         $income_hand = $this->db
             ->select_sum('amount')
             ->where('to_hand', 1)
+            ->where('status', 1)
+            ->where('tbl_user_id', $user_id)
             ->get('incomes')
             ->row()->amount ?? 0;
 
         $expense_hand = $this->db
             ->select_sum('amount')
             ->where('from_hand', 1)
+            ->where('status', 1)
+            ->where('tbl_user_id', $user_id)
             ->get('expenses')
             ->row()->amount ?? 0;
 
@@ -57,46 +71,49 @@ class Dashboard_model extends CI_Model
         ];
     }
 
+
     public function get_recent_transactions($limit = 20)
     {
+        $user_id = $this->session->userdata('user_id');
+
         $incomes = $this->db
             ->select("
-            incomes.date,
-            incomes.amount,
-            'income' as type,
-            incomes.comment,
-            incomes.to_hand as hand,
-            incomes.tbl_banks_id,
-            banks.bank as bank_name,
-            main_income.income_name as main_name,
-            sub_income.sub_income_name as sub_name
-        ")
+                incomes.date,
+                incomes.amount,
+                'income' as type,
+                incomes.comment,
+                incomes.to_hand as hand,
+                incomes.tbl_banks_id,
+                banks.bank as bank_name,
+                main_income.income_name as main_name,
+                sub_income.sub_income_name as sub_name
+            ")
             ->from('incomes')
             ->join('banks', 'banks.id = incomes.tbl_banks_id', 'left')
             ->join('main_income_types as main_income', 'main_income.id = incomes.tbl_main_income_types_id AND main_income.status = 1', 'left')
             ->join('sub_income_types as sub_income', 'sub_income.id = incomes.tbl_sub_income_types_id AND sub_income.status = 1', 'left')
             ->where('incomes.status', 1)
-            ->where('incomes.tbl_user_id', $this->session->userdata('user_id'))
+            ->where('incomes.tbl_user_id', $user_id)
             ->get()->result_array();
 
         $expenses = $this->db
             ->select("
-            expenses.date,
-            expenses.amount,
-            'expense' as type,
-            expenses.comment,
-            expenses.from_hand as hand,
-            expenses.tbl_banks_id,
-            banks.bank as bank_name,
-            main_expense.main_expense_name as main_name,
-            sub_expense.sub_expense_name as sub_name
-        ")
+                expenses.date,
+                expenses.amount,
+                'expense' as type,
+                expenses.comment,
+                expenses.from_hand as hand,
+                expenses.tbl_banks_id,
+                banks.bank as bank_name,
+                main_expense.main_expense_name as main_name,
+                sub_expense.sub_expense_name as sub_name
+            ")
             ->from('expenses')
             ->join('banks', 'banks.id = expenses.tbl_banks_id', 'left')
             ->join('main_expense_types as main_expense', 'main_expense.id = expenses.tbl_main_expense_types_id AND main_expense.status = 1', 'left')
             ->join('sub_expense_types as sub_expense', 'sub_expense.id = expenses.tbl_sub_expense_types_id AND sub_expense.status = 1', 'left')
             ->where('expenses.status', 1)
-            ->where('expenses.tbl_user_id', $this->session->userdata('user_id'))
+            ->where('expenses.tbl_user_id', $user_id)
             ->get()->result_array();
 
         $transactions = array_merge($incomes, $expenses);
@@ -112,11 +129,14 @@ class Dashboard_model extends CI_Model
     {
         $month = date('m');
         $year = date('Y');
+        $user_id = $this->session->userdata('user_id');
 
         $incomes = $this->db->select("DATE(date) as day, SUM(amount) as total")
             ->from('incomes')
             ->where('MONTH(date)', $month)
             ->where('YEAR(date)', $year)
+            ->where('status', 1)
+            ->where('tbl_user_id', $user_id)
             ->group_by('DATE(date)')
             ->get()->result_array();
 
@@ -124,6 +144,8 @@ class Dashboard_model extends CI_Model
             ->from('expenses')
             ->where('MONTH(date)', $month)
             ->where('YEAR(date)', $year)
+            ->where('status', 1)
+            ->where('tbl_user_id', $user_id)
             ->group_by('DATE(date)')
             ->get()->result_array();
 
@@ -136,16 +158,21 @@ class Dashboard_model extends CI_Model
     public function get_yearly_monthly_profit()
     {
         $year = date('Y');
+        $user_id = $this->session->userdata('user_id');
 
         $incomes = $this->db->select("MONTH(date) as month, SUM(amount) as total")
             ->from('incomes')
             ->where('YEAR(date)', $year)
+            ->where('status', 1)
+            ->where('tbl_user_id', $user_id)
             ->group_by('MONTH(date)')
             ->get()->result_array();
 
         $expenses = $this->db->select("MONTH(date) as month, SUM(amount) as total")
             ->from('expenses')
             ->where('YEAR(date)', $year)
+            ->where('status', 1)
+            ->where('tbl_user_id', $user_id)
             ->group_by('MONTH(date)')
             ->get()->result_array();
 

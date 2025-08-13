@@ -20,10 +20,10 @@ class Auth extends CI_Controller
         $this->load->view('pages/signin');
     }
 
-    public function signup()
-    {
-        $this->load->view('pages/signup');
-    }
+    // public function signup()
+    // {
+    //     $this->load->view('pages/signup');
+    // }
 
     public function register_user()
     {

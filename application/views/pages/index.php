@@ -23,7 +23,7 @@
                                     <?= date('F j, Y'); ?>
                                 </p>
 
-                                <a href="#" id="viewTransactionsBtn" class="btn btn-primary btn-lg mt-4">
+                                <a href="#" id="viewTransactionsBtn" class="btn btn-dark btn-lg mt-4">
                                     View Transactions
                                 </a>
                             </div>
@@ -97,7 +97,7 @@
                                                     <td><?= $t['comment'] ?? ''; ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                            >
+                                            
 
                                         <?php endif; ?>
                                     </tbody>
@@ -123,7 +123,7 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-chart-bar me-1"></i>
-                                Expense - Monthly Overview
+                                Profit - Monthly Overview
                             </div>
                             <div class="card-body"><canvas id="profitChart" width="100%" height="40"></canvas></div>
                         </div>

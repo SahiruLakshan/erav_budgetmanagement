@@ -12,6 +12,7 @@
 <body class="bg-white bg-gradient">
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
+
             <div class="text-center mb-4">
                 <i class="bi bi-person-circle fs-1 text-dark"></i>
                 <h4 class="mt-2">SIGN IN</h4>
@@ -38,9 +39,9 @@
                 <div class="d-grid">
                     <button type="submit" class="btn btn-dark">Sign In</button>
                 </div>
-                <p class="text-center mt-3 mb-0">
+                <!-- <p class="text-center mt-3 mb-0">
                     Don't have an account? <a href="<?= base_url('Auth/signup') ?>" class="text-secondary">Sign Up</a>
-                </p>
+                </p> -->
             </form>
         </div>
     </div>

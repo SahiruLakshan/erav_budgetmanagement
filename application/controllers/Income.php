@@ -59,6 +59,8 @@ class Income extends CI_Controller
         $bank = !empty($this->input->post('bank')) ? $this->input->post('bank') : null;
         $get_money_in_hand = !empty($this->input->post('get_money_in_hand')) ? 1 : 0;
         $comment = $this->input->post('comment');
+        $completed = $this->input->post('completed');
+        $due_date = $this->input->post('due_date');
         $user_id = $this->session->userdata('user_id');
 
         $data = [
@@ -69,6 +71,8 @@ class Income extends CI_Controller
             'tbl_banks_id' => $bank,
             'to_hand' => $get_money_in_hand,
             'comment' => $comment,
+            'completed' => $completed,
+            'due_date' => $due_date,
             'tbl_user_id' => $user_id,
             'status' => 1
         ];

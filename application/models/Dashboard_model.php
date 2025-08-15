@@ -25,6 +25,7 @@ class Dashboard_model extends CI_Model
                 ->select_sum('amount')
                 ->where('tbl_banks_id', $bank['id'])
                 ->where('to_hand', 0)
+                ->where('completed', 'Yes')
                 ->where('status', 1)
                 ->where('tbl_user_id', $user_id)
                 ->get('incomes')
@@ -32,6 +33,7 @@ class Dashboard_model extends CI_Model
 
             $expense_sum = $this->db
                 ->select_sum('amount')
+                ->where('completed', 'Yes')
                 ->where('tbl_banks_id', $bank['id'])
                 ->where('from_hand', 0)
                 ->where('status', 1)
@@ -47,6 +49,7 @@ class Dashboard_model extends CI_Model
         $income_hand = $this->db
             ->select_sum('amount')
             ->where('to_hand', 1)
+            ->where('completed', 'Yes')
             ->where('status', 1)
             ->where('tbl_user_id', $user_id)
             ->get('incomes')
@@ -55,6 +58,7 @@ class Dashboard_model extends CI_Model
         $expense_hand = $this->db
             ->select_sum('amount')
             ->where('from_hand', 1)
+            ->where('completed', 'Yes')
             ->where('status', 1)
             ->where('tbl_user_id', $user_id)
             ->get('expenses')
@@ -93,6 +97,7 @@ class Dashboard_model extends CI_Model
             ->join('main_income_types as main_income', 'main_income.id = incomes.tbl_main_income_types_id AND main_income.status = 1', 'left')
             ->join('sub_income_types as sub_income', 'sub_income.id = incomes.tbl_sub_income_types_id AND sub_income.status = 1', 'left')
             ->where('incomes.status', 1)
+            ->where('incomes.completed', 'Yes')
             ->where('incomes.tbl_user_id', $user_id)
             ->get()->result_array();
 
@@ -113,6 +118,7 @@ class Dashboard_model extends CI_Model
             ->join('main_expense_types as main_expense', 'main_expense.id = expenses.tbl_main_expense_types_id AND main_expense.status = 1', 'left')
             ->join('sub_expense_types as sub_expense', 'sub_expense.id = expenses.tbl_sub_expense_types_id AND sub_expense.status = 1', 'left')
             ->where('expenses.status', 1)
+            ->where('expenses.completed', 'Yes')
             ->where('expenses.tbl_user_id', $user_id)
             ->get()->result_array();
 
@@ -135,6 +141,7 @@ class Dashboard_model extends CI_Model
             ->from('incomes')
             ->where('MONTH(date)', $month)
             ->where('YEAR(date)', $year)
+            ->where('completed', 'Yes')
             ->where('status', 1)
             ->where('tbl_user_id', $user_id)
             ->group_by('DATE(date)')
@@ -144,6 +151,7 @@ class Dashboard_model extends CI_Model
             ->from('expenses')
             ->where('MONTH(date)', $month)
             ->where('YEAR(date)', $year)
+            ->where('completed', 'Yes')
             ->where('status', 1)
             ->where('tbl_user_id', $user_id)
             ->group_by('DATE(date)')
@@ -164,6 +172,7 @@ class Dashboard_model extends CI_Model
             ->from('incomes')
             ->where('YEAR(date)', $year)
             ->where('status', 1)
+            ->where('completed', 'Yes')
             ->where('tbl_user_id', $user_id)
             ->group_by('MONTH(date)')
             ->get()->result_array();
@@ -172,6 +181,7 @@ class Dashboard_model extends CI_Model
             ->from('expenses')
             ->where('YEAR(date)', $year)
             ->where('status', 1)
+            ->where('completed', 'Yes')
             ->where('tbl_user_id', $user_id)
             ->group_by('MONTH(date)')
             ->get()->result_array();

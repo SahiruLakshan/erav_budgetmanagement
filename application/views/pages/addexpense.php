@@ -81,9 +81,22 @@
                                             <input type="checkbox" name="spend_money_from_hand" id="spend_money_from_hand" class="form-check-input" value="1">
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-8">
                                             <label for="comment" class="form-label fw-semibold">Comment</label>
                                             <textarea name="comment" class="form-control" id="comment" placeholder="Optional note"></textarea>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label for="finished" class="form-label fw-semibold">Completed Income ?</label>
+                                            <select name="completed" id="completed" class="form-select">
+                                                <option value="Yes" selected>Yes</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label for="date" class="form-label fw-semibold">Due Date</label>
+                                            <input type="date" name="due_date" id="due_date" class="form-control">
                                         </div>
                                     </div>
 
@@ -114,6 +127,8 @@
                                                 <th>Amount</th>
                                                 <th>Expense From</th>
                                                 <th>Comment</th>
+                                                <th>Completed</th>
+                                                <th>Due Date</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
@@ -127,10 +142,19 @@
                                                     <td>
                                                         <?php if ($expense['tbl_banks_id']): ?>
                                                             <?= htmlspecialchars($expense['bank_name']) ?>
+                                                        <?php elseif ($expense['from_hand'] == 1): ?>
+                                                            <span class="text-danger">Money in Hand</span>
                                                         <?php else: ?>
-                                                            <span class="text-danger">Money From Hand</span>
+                                                            <span class="text-danger">Not Selected</span>
                                                         <?php endif; ?>
+                                                        
                                                     <td><?= htmlspecialchars($expense['comment']) ?></td>
+
+                                                    <td style="color: <?= $expense['completed'] === 'Yes' ? 'green' : 'red' ?>">
+                                                        <?= htmlspecialchars($expense['completed']) ?>
+                                                    </td>
+
+                                                    <td><?= htmlspecialchars($expense['due_date']) ?></td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-warning btn-sm editBtn"
                                                             data-id="<?= $expense['id'] ?>">
@@ -200,6 +224,8 @@
                             $('#date').val(data.date);
                             $('#amount').val(data.amount);
                             $('#comment').val(data.comment);
+                            $('#completed').val(data.completed);
+                            $('#due_date').val(data.due_date);
                             if (data.tbl_banks_id) {
                                 $('#bank').val(data.tbl_banks_id);
                                 $('#spend_money_from_hand').prop('checked', false);

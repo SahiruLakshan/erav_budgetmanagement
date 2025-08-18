@@ -80,4 +80,35 @@ class Auth extends CI_Controller
         $this->session->sess_destroy();
         redirect('Auth');
     }
+
+    public function change_password()
+    {
+        $this->load->view('pages/change_password');
+    }
+
+    public function change()
+    {
+        $email = $this->input->post('email');
+        $new_password = $this->input->post('new_password');
+        $confirm_password = $this->input->post('confirm_password');
+
+        if (empty($email) || empty($new_password) || empty($confirm_password)) {
+            $this->session->set_flashdata('error', 'All fields are required.');
+            redirect('Auth/change_password');
+            return;
+        }
+
+        if ($new_password !== $confirm_password) {
+            $this->session->set_flashdata('error', 'New password and Confirm password do not match.');
+            redirect('Auth/change_password');
+            return;
+        }
+        if ($this->User->update_password_by_email($email, $new_password)) {
+            $this->session->set_flashdata('success', 'Password changed successfully!');
+            redirect('Auth');
+        } else {
+            $this->session->set_flashdata('error', 'Invalid email address. Please try again.');
+            redirect('Auth/change_password');
+        }
+    }
 }

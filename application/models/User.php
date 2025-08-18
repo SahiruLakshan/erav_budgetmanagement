@@ -5,7 +5,7 @@ class User extends CI_Model
 {
     public function __construct()
     {
-        parent::__construct(); 
+        parent::__construct();
     }
 
     public function insert_user($data)
@@ -20,4 +20,18 @@ class User extends CI_Model
         return $query->row_array();
     }
 
+    public function update_password_by_email($email, $new_password)
+    {
+        $this->db->where('email', $email);
+        $query = $this->db->get('users'); 
+
+        if ($query->num_rows() == 0) {
+            return false; // Email not found
+        }
+
+        $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+
+        $this->db->where('email', $email);
+        return $this->db->update('users', ['password' => $hashed_password]);
+    }
 }

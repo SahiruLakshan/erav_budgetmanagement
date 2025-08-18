@@ -48,18 +48,6 @@
                     </nav>
                 </div>
 
-                <div class="sb-sidenav-menu-heading">Bank Details</div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBank" aria-expanded="false" aria-controls="collapseLayouts">
-                    <div class="sb-nav-link-icon"><i class="fas fa-bank"></i></div>
-                    Bank Accounts
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseBank" aria-labelledby="headingFour" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= base_url('bank'); ?>">Add Bank Account</a>
-                    </nav>
-                </div>
-
                 <div class="sb-sidenav-menu-heading">Shortage</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsere" aria-expanded="false" aria-controls="collapseLayouts">
                     <div class="sb-nav-link-icon"><i class="fas fa-bank"></i></div>
@@ -69,6 +57,18 @@
                 <div class="collapse" id="collapsere" aria-labelledby="headingFour" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="<?= base_url('Shortage'); ?>">Incomes & Expenses</a>
+                    </nav>
+                </div>
+
+                <div class="sb-sidenav-menu-heading">Bank Details</div>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBank" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-nav-link-icon"><i class="fas fa-bank"></i></div>
+                    Bank Accounts
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseBank" aria-labelledby="headingFour" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="<?= base_url('bank'); ?>">Add Bank Account</a>
                     </nav>
                 </div>
 

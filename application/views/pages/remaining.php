@@ -154,7 +154,7 @@
                 let type = $(this).data('type');
 
                 $.ajax({
-                    url: '<?= base_url("Remaining/mark_completed/") ?>' + type + '/' + id,
+                    url: '<?= base_url("Shortage/mark_completed/") ?>' + type + '/' + id,
                     method: 'POST',
                     dataType: 'json',
                     success: function(res) {

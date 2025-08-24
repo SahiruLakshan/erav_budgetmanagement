@@ -9,6 +9,10 @@ class Mainincome extends CI_Controller
         parent::__construct();
         $this->load->model('Mainincome_model');
         $this->load->library('form_validation');
+
+        if (!$this->session->userdata('user_id')) {
+            redirect('/');
+        }
     }
 
     public function index()

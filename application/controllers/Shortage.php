@@ -8,6 +8,10 @@ class Shortage extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Remaining_model');
+
+        if (!$this->session->userdata('user_id')) {
+            redirect('/');
+        }
     }
 
     public function index()

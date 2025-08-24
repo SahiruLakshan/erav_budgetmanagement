@@ -12,6 +12,7 @@ class Auth extends CI_Controller
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->helper('form');
+        $this->load->library('email');
     }
 
     public function index()
@@ -73,17 +74,67 @@ class Auth extends CI_Controller
         }
     }
 
-    public function logout()
+    public function verify_email()
     {
-        $this->session->unset_userdata('user_id');
-        $this->session->unset_userdata('user_name');
-        $this->session->sess_destroy();
-        redirect('Auth');
+        $this->load->view('pages/verify_email');
+    }
+
+    public function send_verification_code()
+    {
+        $email = $this->input->post('email');
+        $entered_code = $this->input->post('code');
+
+        $user = $this->User->get_user_by_email($email);
+        if (!$user) {
+            $this->session->set_flashdata('error', 'Email not registered.');
+            redirect('Auth/verify_email');
+            return;
+        }
+
+        if (empty($entered_code)) {
+            $verification_code = rand(10000000, 99999999); 
+            $this->session->set_userdata('verification_email', $email);
+            $this->session->set_userdata('verification_code', $verification_code);
+
+            $this->load->library('email');
+            $this->email->from('teccom.srilanka@gmail.com', 'Your App Name');
+            $this->email->to($email);
+            $this->email->subject('Password Reset Verification Code');
+            $this->email->message("Your verification code is: $verification_code");
+
+            if ($this->email->send()) {
+                $this->session->set_flashdata('success', 'Verification code sent to your registered email.');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to send email. Try again.');
+            }
+
+            redirect('Auth/verify_email');
+            return;
+        }
+
+        $session_code = $this->session->userdata('verification_code');
+        $session_email = $this->session->userdata('verification_email');
+
+        if ($entered_code == $session_code && $email == $session_email) {
+            $this->session->unset_userdata('verification_code'); 
+            redirect('Auth/change_password?email=' . urlencode($email));
+        } else {
+            $this->session->set_flashdata('error', 'Invalid verification code.');
+            redirect('Auth/verify_email');
+        }
     }
 
     public function change_password()
     {
-        $this->load->view('pages/change_password');
+        $email = $this->input->get('email');
+
+        $session_email = $this->session->userdata('verification_email');
+        if ($email != $session_email) {
+            $this->session->set_flashdata('error', 'Unauthorized access.');
+            redirect('Auth/verify_email');
+        }
+
+        $this->load->view('pages/change_password', ['email' => $email]);
     }
 
     public function change()
@@ -92,23 +143,34 @@ class Auth extends CI_Controller
         $new_password = $this->input->post('new_password');
         $confirm_password = $this->input->post('confirm_password');
 
-        if (empty($email) || empty($new_password) || empty($confirm_password)) {
+        if (empty($new_password) || empty($confirm_password)) {
             $this->session->set_flashdata('error', 'All fields are required.');
-            redirect('Auth/change_password');
+            redirect('Auth/change_password?email=' . urlencode($email));
             return;
         }
 
         if ($new_password !== $confirm_password) {
-            $this->session->set_flashdata('error', 'New password and Confirm password do not match.');
-            redirect('Auth/change_password');
+            $this->session->set_flashdata('error', 'Passwords do not match.');
+            redirect('Auth/change_password?email=' . urlencode($email));
             return;
         }
+
         if ($this->User->update_password_by_email($email, $new_password)) {
+            $this->session->unset_userdata('verification_email'); 
             $this->session->set_flashdata('success', 'Password changed successfully!');
-            redirect('Auth');
+            redirect('Auth/login');
         } else {
-            $this->session->set_flashdata('error', 'Invalid email address. Please try again.');
-            redirect('Auth/change_password');
+            $this->session->set_flashdata('error', 'Something went wrong.');
+            redirect('Auth/change_password?email=' . urlencode($email));
         }
     }
+
+    public function logout()
+    {
+        $this->session->unset_userdata('user_id');
+        $this->session->unset_userdata('user_name');
+        $this->session->sess_destroy();
+        redirect('Auth');
+    }
+
 }

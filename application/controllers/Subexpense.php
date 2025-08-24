@@ -10,6 +10,10 @@ class Subexpense extends CI_Controller
         $this->load->model('Subexpense_model');
         $this->load->model('Mainexpense_model');
         $this->load->library('form_validation');
+
+        if (!$this->session->userdata('user_id')) {
+            redirect('/');
+        }
     }
 
     public function index()

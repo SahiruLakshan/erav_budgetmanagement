@@ -13,6 +13,10 @@ class Income extends CI_Controller
         $this->load->model('Subincome_model');
         $this->load->model('Bank_model');
         $this->load->library('form_validation');
+
+        if (!$this->session->userdata('user_id')) {
+            redirect('/');
+        }
     }
 
     public function index()

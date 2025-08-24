@@ -28,13 +28,26 @@
 
                 <div class="mb-3">
                     <label class="form-label">Registered Email</label>
-                    <input type="email" class="form-control" name="email" required>
+                    <input type="email" class="form-control"
+                        name="email"
+                        value="<?= $this->session->userdata('verify_email'); ?>"
+                        required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Verification Code</label>
-                    <input type="text" class="form-control" name="code" maxlength="8">
-                    <small class="text-muted">Leave blank to receive code via email.</small>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <?php for ($i = 1; $i <= 8; $i++): ?>
+                            <input type="text"
+                                class="form-control text-center otp-input"
+                                maxlength="1"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                style="width: 38px; font-size: 1.5rem;">
+                        <?php endfor; ?>
+                    </div>
+                    <input type="hidden" name="code" id="code_full"> <!-- Hidden field -->
+                    <small class="text-muted">Enter the 8-digit verification code sent to your email.</small>
                 </div>
 
                 <div class="d-grid mt-3">
@@ -45,5 +58,32 @@
         </div>
     </div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll(".otp-input");
+        const hiddenInput = document.getElementById("code_full");
+
+        inputs.forEach((input, index) => {
+            input.addEventListener("input", () => {
+                if (input.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+                collectCode();
+            });
+
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace" && input.value === "" && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        function collectCode() {
+            let code = "";
+            inputs.forEach(i => code += i.value);
+            hiddenInput.value = code;
+        }
+    });
+</script>
 
 </html>

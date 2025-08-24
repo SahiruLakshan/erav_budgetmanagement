@@ -42,7 +42,6 @@
                 <div class="d-grid mt-3">
                     <button type="submit" class="btn btn-dark">Sign In</button>
                 </div>
-                
             </form>
         </div>
     </div>

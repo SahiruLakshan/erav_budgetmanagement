@@ -29,5 +29,9 @@ class User extends CI_Model
 
         return ($this->db->affected_rows() > 0); 
     }
+
+    public function get_all_users() {
+        return $this->db->get('users')->result();
+    }
 }
 

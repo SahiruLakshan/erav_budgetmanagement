@@ -67,7 +67,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="sub_income" class="form-label fw-semibold">Select Bank (If you spend money to bank)</label>
+                                            <label for="sub_income" class="form-label fw-semibold">Select Bank (If you spend money from bank)</label>
                                             <select name="bank" id="bank" class="form-select">
                                                 <option value="">Select Bank</option>
                                                 <?php foreach ($banks as $bank): ?>

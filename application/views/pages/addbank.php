@@ -27,7 +27,7 @@
                 <?php endif; ?>
 
                 <div class="row g-4">
-                    <div class="col-xl-4">
+                    <div class="col-12 col-md-4">
                         <div class="card shadow border-0 h-100">
                             <div class="card-header bg-secondary text-white d-flex align-items-center">
                                 <i class="fas fa-plus me-2"></i>
@@ -78,7 +78,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-8">
+                    <div class="col-12 col-md-8">
                         <div class="card shadow border-0">
                             <div class="card-header bg-dark text-white d-flex align-items-center">
                                 <i class="fas fa-table me-2"></i>

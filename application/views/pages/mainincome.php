@@ -11,7 +11,7 @@
                     <span class="text-muted"><?= date('F j, Y'); ?></span>
                 </div>
                 <hr class="mb-4">
-                
+
                 <?php if ($this->session->flashdata('success')): ?>
                     <div class="alert alert-success bg-success text-white alert-dismissible fade show mt-3" role="alert">
                         <?= $this->session->flashdata('success') ?>
@@ -27,7 +27,7 @@
                 <?php endif; ?>
 
                 <div class="row g-4">
-                    <div class="col-xl-4">
+                    <div class="col-12 col-md-4">
                         <div class="card shadow border-0">
                             <div class="card-header bg-secondary text-white d-flex align-items-center">
                                 <i class="fas fa-plus me-2"></i>
@@ -44,7 +44,7 @@
                                         <label for="comment">Comment</label>
                                         <textarea name="comment" class="form-control" id="comment" placeholder="Optional"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-success" id="submitBtn">
+                                    <button type="submit" class="btn btn-success w-100" id="submitBtn">
                                         <i class="fa-solid fa-save me-1"></i><span id="submitText">Save</span>
                                     </button>
                                 </form>
@@ -52,44 +52,45 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-8">
+                    <div class="col-12 col-md-8">
                         <div class="card shadow border-0">
                             <div class="card-header bg-dark text-white d-flex align-items-center">
                                 <i class="fas fa-table me-2"></i>
                                 <span>Main Income Types</span>
                             </div>
                             <div class="card-body">
-                                <table id="mainIncomeTable" class="table table-hover align-middle">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th style="width: 35%;">Income Name</th>
-                                            <th style="width: 45%;">Comment</th>
-                                            <th style="width: 20%;" class="text-center">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($mincomes as $income): ?>
+                                <div class="table-responsive">
+                                    <table id="mainIncomeTable" class="table table-hover align-middle">
+                                        <thead class="table-light">
                                             <tr>
-                                                <td><?= htmlspecialchars($income['income_name']) ?></td>
-                                                <td><?= htmlspecialchars($income['comment']) ?></td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-warning btn-sm editBtn"
-                                                        data-id="<?= $income['id'] ?>">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                    <a href="<?= base_url('Mainincome/delete/' . $income['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </td>
+                                                <th style="width: 35%;">Income Name</th>
+                                                <th style="width: 45%;">Comment</th>
+                                                <th style="width: 20%;" class="text-center">Action</th>
                                             </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($mincomes as $income): ?>
+                                                <tr>
+                                                    <td><?= htmlspecialchars($income['income_name']) ?></td>
+                                                    <td><?= htmlspecialchars($income['comment']) ?></td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-warning btn-sm editBtn" data-id="<?= $income['id'] ?>">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <a href="<?= base_url('Mainincome/delete/' . $income['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this entry?')">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </main>
         <?php include(APPPATH . 'views/components/footer.php'); ?>

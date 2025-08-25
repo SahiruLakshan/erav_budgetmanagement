@@ -17,14 +17,13 @@ class Auth extends CI_Controller
 
     public function index()
     {
-
         $this->load->view('pages/signin');
     }
 
-    public function signup()
-    {
-        $this->load->view('pages/signup');
-    }
+    // public function signup()
+    // {
+    //     $this->load->view('pages/signup');
+    // }
 
     public function register_user()
     {
@@ -73,8 +72,6 @@ class Auth extends CI_Controller
             redirect('Auth');
         }
     }
-
-
 
     public function verify_email()
     {

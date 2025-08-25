@@ -48,15 +48,18 @@
                     </nav>
                 </div>
 
-                <div class="sb-sidenav-menu-heading">Shortage</div>
+                <div class="sb-sidenav-menu-heading">Payable & Receivable</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsere" aria-expanded="false" aria-controls="collapseLayouts">
-                    <div class="sb-nav-link-icon"><i class="fas fa-bank"></i></div>
-                    Shortages
+                    <div class="sb-nav-link-icon"><i class="fas fa-minus-circle"></i></div>
+                    Account Payable & Receivable
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
                 <div class="collapse" id="collapsere" aria-labelledby="headingFour" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= base_url('Shortage'); ?>">Incomes & Expenses</a>
+                        <a class="nav-link" href="<?= base_url('Receivable/incomes'); ?>">Incomes</a>
+                    </nav>
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="<?= base_url('Payable/expenses'); ?>">Expenses</a>
                     </nav>
                 </div>
 
@@ -68,7 +71,7 @@
                 </a>
                 <div class="collapse" id="collapseBank" aria-labelledby="headingFour" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= base_url('bank'); ?>">Add Bank Account</a>
+                        <a class="nav-link" href="<?= base_url('Bank'); ?>">Add Bank Account</a>
                     </nav>
                 </div>
 

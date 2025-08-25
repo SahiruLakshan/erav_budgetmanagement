@@ -19,9 +19,6 @@
                                 </h1>
                                 <p class="mt-2 text-muted">Cash in Hand: Rs. <?= number_format($cash_in_hand ?? 0, 2); ?></p>
                                 <p class="mt-2 text-muted"><?= date('F j, Y'); ?></p>
-                                <a href="#" id="viewTransactionsBtn" class="btn btn-dark btn-lg mt-3 w-100 w-md-auto">
-                                    View Transactions
-                                </a>
                             </div>
                         </div>
                     </div>

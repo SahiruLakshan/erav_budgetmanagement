@@ -67,7 +67,7 @@
                         <h5>Summary</h5>
                         <p><strong>Total Income:</strong> <?= number_format($totals['income'], 2) ?></p>
                         <p><strong>Total Expenses:</strong> <?= number_format($totals['expense'], 2) ?></p>
-                        <p><strong>Balance:</strong> <?= number_format($totals['balance'], 2) ?></p>
+                        <!-- <p><strong>Balance:</strong> <?= number_format($totals['balance'], 2) ?></p> -->
                     </div>
                 </div>
             </div>

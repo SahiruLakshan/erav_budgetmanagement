@@ -91,7 +91,7 @@
                             <a class="nav-link" href="<?= base_url('Bank'); ?>">Bank Details</a>
                         </nav>
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="<?= base_url('Users'); ?>">Users</a>
+                            <a class="nav-link" href="<?= base_url('Users/details'); ?>">Users</a>
                         </nav>
                     </div>
                 <?php endif; ?>

@@ -35,8 +35,8 @@ class User extends CI_Model
         return $this->db->get('users')->result();
     }
 
-    public function delete_user($id) {
-        return $this->db->delete('users', ['id' => $id]);
+    public function update_status($id, $data) {
+        return $this->db->where('id', $id)->update('users', $data);
     }
 }
 

@@ -21,12 +21,19 @@ class Users extends CI_Controller
         $this->load->view('pages/admin/users', $data);
     }
 
-    public function delete($id) {
-        if ($this->User->delete_user($id)) {
-            $this->session->set_flashdata('success', 'User deleted successfully.');
-        } else {
-            $this->session->set_flashdata('error', 'Failed to delete user.');
-        }
+    public function activate($id)
+    {
+        $data['status'] = 1;
+        $this->User->update_status($id, $data);
+        $this->session->set_flashdata('success', 'Activated successfully.');
+        redirect('Users/details');
+    }
+
+    public function deactivate($id)
+    {
+        $data['status'] = 0;
+        $this->User->update_status($id, $data);
+        $this->session->set_flashdata('success', 'Deactivated successfully.');
         redirect('Users/details');
     }
 }

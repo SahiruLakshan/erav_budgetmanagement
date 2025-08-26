@@ -6,12 +6,21 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container mt-4">
-                <h1 class="fw-bold">User Details</h1><hr>
+                <h1 class="fw-bold">User Details</h1>
+                <hr>
 
                 <?php if ($this->session->flashdata('success')): ?>
-                    <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
-                <?php elseif ($this->session->flashdata('error')): ?>
-                    <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
+                    <div class="alert alert-success bg-success text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('success') ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->session->flashdata('error')): ?>
+                    <div class="alert bg-danger text-white alert-dismissible fade show mt-3" role="alert">
+                        <?= $this->session->flashdata('error') ?>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
                 <?php endif; ?>
 
                 <div class="container mt-4">
@@ -22,7 +31,8 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Created At</th>
-                                <!-- <th>Action</th> -->
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,13 +42,26 @@
                                     <td><?= $row->name ?></td>
                                     <td><?= $row->email ?></td>
                                     <td><?= $row->created_at ?></td>
-                                    <!-- <td>
-                                        <a href="<?= site_url('users/delete/'.$row->id) ?>" 
-                                           onclick="return confirm('Are you sure you want to delete this user?')"
-                                           class="btn btn-danger btn-sm">
-                                           <i class="fas fa-trash"></i>
-                                        </a>
-                                    </td> -->
+                                    <td>
+                                        <span style="color: <?= $row->status == 1 ? 'green' : 'red' ?>;">
+                                            <?= $row->status == 1 ? 'Active' : 'Inactive' ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <?php if ($row->status == 1): ?>
+                                            <a href="<?= base_url('Users/deactivate/' . $row->id) ?>"
+                                                onclick="return confirm('Are you sure you want to deactivate this user?')"
+                                                class="btn btn-warning btn-sm" title="Deactivate">
+                                                <i class="fas fa-user-slash"></i>
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="<?= base_url('Users/activate/' . $row->id) ?>"
+                                                onclick="return confirm('Are you sure you want to activate this user?')"
+                                                class="btn btn-success btn-sm" title="Activate">
+                                                <i class="fas fa-user-check"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -59,4 +82,12 @@
             "lengthChange": true
         });
     });
+
+    setTimeout(function() {
+        const alert = document.querySelector('.alert');
+        if (alert) {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            bsAlert.close();
+        }
+    }, 3000);
 </script>

@@ -11,37 +11,31 @@
 
 <body class="bg-white bg-gradient">
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
-
-            <a href="<?= base_url('Auth') ?>" class="btn btn-sm btn-secondary" style="width:80px"><i class="bi bi-arrow-left-short"></i> Back</a>
-
-            <div class="text-center mb-4">
-                <h4 class="mt-2">Change Password</h4>
-            </div>
-            <form method="post" action="<?= base_url('Auth/change') ?>">
-                <?php if ($this->session->flashdata('error')): ?>
-                    <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
-                <?php endif; ?>
-                <?php if ($this->session->flashdata('success')): ?>
-                    <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
-                <?php endif; ?>
-                <input type="hidden" name="email" value="<?= $this->input->get('email') ?>">
-
-                <div class="mb-3">
-                    <label for="new_password" class="form-label">New Password</label>
-                    <input type="password" class="form-control" id="new_password" name="new_password" required>
+        <div class="card shadow-lg p-4" style="width:100%; max-width:400px;">
+            <h4 class="text-center mb-3">Set New Password</h4>
+            <?php if ($this->session->flashdata('success')): ?>
+                <div class="alert alert-success">
+                    <?= $this->session->flashdata('success') ?>
                 </div>
+            <?php endif; ?>
 
+            <?php if ($this->session->flashdata('error')): ?>
+                <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+            <?php endif; ?>
+
+            <form method="post" action="<?= base_url('Auth/change_password') ?>">
                 <div class="mb-3">
-                    <label for="confirm_password" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    <label>New Password</label>
+                    <input type="password" class="form-control" name="password" required>
                 </div>
-
-                <div class="d-grid mt-3">
-                    <button type="submit" class="btn btn-dark">Change Password</button>
+                <div class="mb-3">
+                    <label>Confirm Password</label>
+                    <input type="password" class="form-control" name="confirm_password" required>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-dark">Update Password</button>
                 </div>
             </form>
-
         </div>
     </div>
 </body>

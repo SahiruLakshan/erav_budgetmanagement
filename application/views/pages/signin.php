@@ -37,11 +37,13 @@
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
 
-                <a href="Auth/verify_email" class="text-secondary">Change Your Password</a>
-                
+                <a href="Auth/request_password_reset" class="text-secondary">Change Your Password</a>
+
                 <div class="d-grid mt-3">
                     <button type="submit" class="btn btn-dark">Sign In</button>
-                </div>
+                </div><br>
+
+                <p>Don't have an account?<a href="Auth/signup" class="text-secondary"> Sign Up</a></p>
             </form>
         </div>
     </div>

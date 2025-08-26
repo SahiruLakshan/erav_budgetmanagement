@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Email Verification</title>
+    <title>Reset Password - Verify Code</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 </head>
@@ -13,13 +13,13 @@
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card shadow-lg p-4" style="width: 100%; max-width: 420px;">
 
-            <a href="<?= base_url('Auth/signup') ?>" class="btn btn-sm btn-outline-secondary mb-3" style="width:90px">
+            <a href="<?= base_url('Auth/login') ?>" class="btn btn-sm btn-outline-secondary mb-3" style="width:90px">
                 <i class="bi bi-arrow-left-short"></i> Back
             </a>
 
             <div class="text-center mb-4">
-                <h4 class="fw-bold">Verify Your Email</h4>
-                <p class="text-muted small">We sent a verification code to your email. Please enter it below.</p>
+                <h4 class="fw-bold">Verify Reset Code</h4>
+                <p class="text-muted small">We sent a 6-digit reset code to your email. Please enter it below.</p>
             </div>
 
             <?php if ($this->session->flashdata('error')): ?>
@@ -29,13 +29,13 @@
                 <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
             <?php endif; ?>
 
-            <form method="post" action="<?= base_url('Auth/verify_email') ?>">
-                <input type="hidden" name="email" value="<?= $this->session->userdata('pending_user')['email'] ?? '' ?>">
+            <form method="post" action="<?= base_url('Auth/verify_reset_code') ?>">
+                <input type="hidden" name="email" value="<?= $this->session->userdata('reset_email') ?? '' ?>">
 
                 <div class="mb-3" id="otpSection">
-                    <label class="form-label">Verification Code</label>
+                    <label class="form-label">Reset Code</label>
                     <div class="d-flex gap-2 justify-content-center">
-                        <?php for ($i = 1; $i <= 6; $i++): ?> <!-- 6-digit code -->
+                        <?php for ($i = 1; $i <= 6; $i++): ?> 
                             <input type="text"
                                 class="form-control text-center otp-input"
                                 maxlength="1"
@@ -49,10 +49,9 @@
                 </div>
 
                 <div class="d-grid mt-3">
-                    <button type="submit" class="btn btn-dark">Verify Email</button>
+                    <button type="submit" class="btn btn-dark">Verify Code</button>
                 </div>
             </form>
-
         </div>
     </div>
 

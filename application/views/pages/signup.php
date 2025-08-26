@@ -46,6 +46,7 @@
                 <div class="d-grid">
                     <button type="submit" class="btn btn-dark">Sign Up</button>
                 </div>
+                
                 <!-- <p class="text-center mt-3 mb-0">
                     Already have an account? <a href="<?= base_url('Auth') ?>" class="text-secondary">Sign In</a>
                 </p> -->

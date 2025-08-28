@@ -76,7 +76,7 @@
                 </div>
 
                 <?php
-                if ($this->session->userdata('user_id') === '1'): ?>
+                if ($this->session->userdata('user_id') === '2'): ?>
                     <div class="sb-sidenav-menu-heading">Super Admin Section</div>
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseadmin" aria-expanded="false" aria-controls="collapseLayouts">
                         <div class="sb-nav-link-icon"><i class="fas fa-bank"></i></div>
@@ -87,9 +87,7 @@
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="<?= base_url('Transactions/transactions'); ?>">Transactions</a>
                         </nav>
-                        <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="<?= base_url('Bank'); ?>">Bank Details</a>
-                        </nav>
+                        
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="<?= base_url('Users/details'); ?>">Users</a>
                         </nav>

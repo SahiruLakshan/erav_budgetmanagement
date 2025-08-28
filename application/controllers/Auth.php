@@ -25,7 +25,7 @@ class Auth extends CI_Controller
         ];
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, ""); 
+        curl_setopt($ch, CURLOPT_URL, "https://aws.erav.lk/Temp/bf360/eravawsmail.php"); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);

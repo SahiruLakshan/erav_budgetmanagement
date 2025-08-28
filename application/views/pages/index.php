@@ -20,6 +20,12 @@
                                 <p class="mt-2 text-muted">Cash in Hand: Rs. <?= number_format($cash_in_hand ?? 0, 2); ?></p>
                                 <p class="mt-2 text-muted"><?= date('F j, Y'); ?></p>
                             </div>
+                            <div class="card-footer text-center">
+                                <a href="<?= base_url('Monthend/monthly_status') ?>" class="btn btn-dark w-50">
+   Check Month End Status
+</a>
+
+                            </div>
                         </div>
                     </div>
 

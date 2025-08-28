@@ -9,7 +9,7 @@ class Users extends CI_Controller
         $this->load->model('Transaction_model');
         $this->load->model('User');
 
-        if ($this->session->userdata('user_id') != 1) {
+        if ($this->session->userdata('user_id') != 2) {
             redirect('no_access');
         }
     }

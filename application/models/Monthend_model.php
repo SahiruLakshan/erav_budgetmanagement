@@ -1,76 +1,94 @@
 <?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
 class Monthend_model extends CI_Model
 {
-    public function get_banks($user_id)
+
+    public function create_monthend($data)
     {
-        return $this->db->where('tbl_user_id', $user_id)
-            ->where('status', 1)
-            ->get('banks')->result();
+        $this->db->insert('monthend_closings', $data);
+        return $this->db->insert_id();
     }
 
-    public function get_bank($bank_id = null, $user_id)
+    public function get_monthend($user_id, $bank_id, $month, $year)
     {
-        $this->db->where('tbl_user_id', $user_id)->where('status', 1);
-        if ($bank_id) $this->db->where('id', $bank_id);
-        return $this->db->get('banks')->row();
+        $this->db->where('tbl_user_id', $user_id);
+        if ($bank_id !== null) {
+            $this->db->where('tbl_bank_id', $bank_id);
+        } else {
+            $this->db->where('tbl_bank_id IS NULL', null, false);
+        }
+        $this->db->where('month', $month);
+        $this->db->where('year', $year);
+        $this->db->where('status', 1);
+        return $this->db->get('monthend_closings')->row();
     }
 
-    public function get_previous_incomes($bank_id, $month, $year, $user_id)
+    public function get_last_month_closing($user_id, $bank_id)
     {
-        $this->db->select_sum('amount')
-            ->where('tbl_user_id', $user_id)
-            ->where('date <', "$year-$month-01")
-            ->where('status', 1);
-        if ($bank_id) $this->db->where('tbl_banks_id', $bank_id);
-        else $this->db->where('tbl_banks_id IS NULL', null, false);
+        $this->db->where('tbl_user_id', $user_id);
+        if ($bank_id !== null) {
+            $this->db->where('tbl_bank_id', $bank_id);
+        } else {
+            $this->db->where('tbl_bank_id IS NULL', null, false);
+        }
+        $this->db->where('status', 1);
+        $this->db->order_by('year DESC, month DESC');
+        $this->db->limit(1);
+        return $this->db->get('monthend_closings')->row();
+    }
+
+    public function get_month_incomes($user_id, $bank_id, $month, $year)
+    {
+        $this->db->select_sum('amount');
+        $this->db->where('tbl_user_id', $user_id);
+        if ($bank_id !== null) {
+            $this->db->where('tbl_banks_id', $bank_id);
+        } else {
+            $this->db->where('tbl_banks_id IS NULL', null, false);
+            $this->db->or_where('to_hand', 1); // if you mark cash in hand
+        }
+        $this->db->where('MONTH(date)', $month);
+        $this->db->where('YEAR(date)', $year);
         return $this->db->get('incomes')->row()->amount ?? 0;
     }
 
-    public function get_previous_expenses($bank_id, $month, $year, $user_id)
+    public function get_month_expenses($user_id, $bank_id, $month, $year)
     {
-        $this->db->select_sum('amount')
-            ->where('tbl_user_id', $user_id)
-            ->where('date <', "$year-$month-01")
-            ->where('status', 1);
-        if ($bank_id) $this->db->where('tbl_banks_id', $bank_id);
-        else $this->db->where('tbl_banks_id IS NULL', null, false);
+        $this->db->select_sum('amount');
+        $this->db->where('tbl_user_id', $user_id);
+        if ($bank_id !== null) {
+            $this->db->where('tbl_banks_id', $bank_id);
+        } else {
+            $this->db->where('tbl_banks_id IS NULL', null, false);
+            $this->db->or_where('from_hand', 1); // if you mark cash in hand
+        }
+        $this->db->where('MONTH(date)', $month);
+        $this->db->where('YEAR(date)', $year);
         return $this->db->get('expenses')->row()->amount ?? 0;
     }
 
-    public function get_month_incomes($bank_id, $month, $year, $user_id)
+    public function get_closings($user_id)
     {
-        $this->db->select_sum('amount')
-            ->where('tbl_user_id', $user_id)
-            ->where("DATE_FORMAT(date,'%Y-%m') = '$year-$month'")
-            ->where('status', 1);
-        if ($bank_id) $this->db->where('tbl_banks_id', $bank_id);
-        else $this->db->where('tbl_banks_id IS NULL', null, false);
-        return $this->db->get('incomes')->row()->amount ?? 0;
+        $this->db->select("mc.*, b.bank as bank_name");
+        $this->db->from("monthend_closings mc");
+        $this->db->join("banks b", "mc.tbl_bank_id = b.id", "left");
+        $this->db->where("mc.tbl_user_id", $user_id);
+        $this->db->order_by("mc.year DESC, mc.month DESC");
+        return $this->db->get()->result();
     }
 
-    public function get_month_expenses($bank_id, $month, $year, $user_id)
+    public function cancel_monthend($id, $user_id)
     {
-        $this->db->select_sum('amount')
-            ->where('tbl_user_id', $user_id)
-            ->where("DATE_FORMAT(date,'%Y-%m') = '$year-$month'")
-            ->where('status', 1);
-        if ($bank_id) $this->db->where('tbl_banks_id', $bank_id);
-        else $this->db->where('tbl_banks_id IS NULL', null, false);
-        return $this->db->get('expenses')->row()->amount ?? 0;
+        $this->db->where("id", $id);
+        $this->db->where("tbl_user_id", $user_id);
+        return $this->db->update("monthend_closings", ["status" => 0]);
     }
 
-    public function get_month_transactions($bank_id, $month, $year, $user_id)
+    public function get_user_banks($user_id)
     {
-        $bank_filter = $bank_id ? "tbl_banks_id = $bank_id" : "tbl_banks_id IS NULL";
-        return $this->db->query("
-        SELECT id, date, amount, 'Income' AS type, comment
-        FROM incomes
-        WHERE tbl_user_id = $user_id AND $bank_filter AND DATE_FORMAT(date,'%Y-%m') = '$year-$month' AND status = 1
-        UNION ALL
-        SELECT id, date, amount, 'Expense' AS type, comment
-        FROM expenses
-        WHERE tbl_user_id = $user_id AND $bank_filter AND DATE_FORMAT(date,'%Y-%m') = '$year-$month' AND status = 1
-        ORDER BY date ASC
-    ")->result();
+        $this->db->where("tbl_user_id", $user_id);
+        $this->db->where("status", 1);
+        return $this->db->get("banks")->result();
     }
 }

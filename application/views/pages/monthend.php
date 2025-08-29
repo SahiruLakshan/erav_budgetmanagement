@@ -7,140 +7,73 @@
         <main class="pt-4">
             <div class="container-fluid px-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h1 class="fw-bold">Month End - <?= date('F'); ?></h1>
+                    <h1 class="fw-bold">Month End Closing- <?= date('F'); ?></h1>
                     <span class="text-muted"><?= date('F j, Y'); ?></span>
                 </div>
                 <hr>
 
-                <form method="get" class="row g-2 mb-4">
-                    <div class="col-md-4">
-                        <select name="bank_id" class="form-select" onchange="this.form.submit()">
-                            <option value="">-- All Banks --</option>
-                            <?php foreach ($banks as $b): ?>
-                                <option value="<?= $b->id ?>" <?= $b->id == $selected_bank_id ? 'selected' : '' ?>>
-                                    <?= $b->bank ?> (<?= $b->account_number ?>)
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <input type="month" name="month" class="form-control"
-                            value="<?= isset($monthnum) ? $year . '-' . str_pad($monthnum, 2, '0', STR_PAD_LEFT) : date('Y-m') ?>"
-                            onchange="this.form.submit()">
-                    </div>
-                </form>
+                <div class="container mt-4">
+                    <?php if ($this->session->flashdata('success')): ?>
+                        <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+                    <?php endif; ?>
+                    <?php if ($this->session->flashdata('error')): ?>
+                        <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+                    <?php endif; ?>
 
-
-                <?php foreach ($all_data as $data): ?>
-                    <div class="card shadow mb-4">
-                        <div class="card-header bg-secondary text-white fw-bold">
-                            <?= $data['bank']->bank ?> (<?= $data['bank']->account_number ?>)
+                    <form action="<?= base_url('Monthend/close') ?>" method="post" class="form-inline mb-3">
+                        <div class="form-group mb-2">
+                            <label>Select Bank:</label>
+                            <select name="bank_id" class="form-control ml-2">
+                                <option value="">Cash in Hand</option>
+                                <?php foreach ($banks as $bank): ?>
+                                    <option value="<?= $bank->id ?>"><?= $bank->bank ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
-                        <div class="card-body">
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-3">
-                                    <div class="p-3 bg-light border rounded text-center">
-                                        <small>Opening Balance</small>
-                                        <div class="fw-bold"><?= number_format($data['opening_balance'], 2) ?></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="p-3 bg-light border rounded text-center">
-                                        <small>Total Incomes</small>
-                                        <div class="text-success fw-bold"><?= number_format($data['month_incomes'], 2) ?></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="p-3 bg-light border rounded text-center">
-                                        <small>Total Expenses</small>
-                                        <div class="text-danger fw-bold"><?= number_format($data['month_expenses'], 2) ?></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="p-3 bg-light border rounded text-center">
-                                        <small>Profit</small>
-                                        <div class="<?= $data['profit'] >= 0 ? 'text-success' : 'text-danger' ?> fw-bold"><?= number_format($data['profit'], 2) ?></div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <table id="transactionsTable_<?= $data['bank']->id ?>" class="table table-striped table-bordered nowrap" style="width:100%">
-                                <thead class="table-dark">
+                        <button type="submit" class="btn btn-dark ml-3">Month End</button>
+                    </form>
+
+                    <table class="table table-bordered w-100" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Month-Year</th>
+                                <th>Bank</th>
+                                <th>Opening</th>
+                                <th>Income</th>
+                                <th>Expense</th>
+                                <th>Closing</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($closings)): ?>
+                                <?php foreach ($closings as $row): ?>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Amount</th>
-                                        <th>Comment</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($data['transactions'] as $t): ?>
-                                        <tr>
-                                            <td><?= $t->date ?></td>
-                                            <td><?= $t->type ?></td>
-                                            <td><?= number_format($t->amount, 2) ?></td>
-                                            <td><?= $t->comment ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-
-                <div class="card shadow mb-4">
-                    <div class="card-header bg-info text-white fw-bold">Cash in Hand</div>
-                    <div class="card-body">
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-3">
-                                <div class="p-3 bg-light border rounded text-center">
-                                    <small>Opening Balance</small>
-                                    <div class="fw-bold"><?= number_format($cash['opening_balance'], 2) ?></div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="p-3 bg-light border rounded text-center">
-                                    <small>Total Incomes</small>
-                                    <div class="text-success fw-bold"><?= number_format($cash['month_incomes'], 2) ?></div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="p-3 bg-light border rounded text-center">
-                                    <small>Total Expenses</small>
-                                    <div class="text-danger fw-bold"><?= number_format($cash['month_expenses'], 2) ?></div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="p-3 bg-light border rounded text-center">
-                                    <small>Profit</small>
-                                    <div class="<?= $cash['profit'] >= 0 ? 'text-success' : 'text-danger' ?> fw-bold"><?= number_format($cash['profit'], 2) ?></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <table id="cashTable" class="table table-striped table-bordered nowrap" style="width:100%">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Type</th>
-                                    <th>Amount</th>
-                                    <th>Comment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($cash['transactions'] as $t): ?>
-                                    <tr>
-                                        <td><?= $t->date ?></td>
-                                        <td><?= $t->type ?></td>
-                                        <td><?= number_format($t->amount, 2) ?></td>
-                                        <td><?= $t->comment ?></td>
+                                        <td><?= $row->month ?? '' ?>-<?= $row->year ?? '' ?></td>
+                                        <td><?= $row->bank_name ?? "Cash in Hand" ?></td>
+                                        <td><?= $row->opening_balance ?? 0 ?></td>
+                                        <td><?= $row->total_income ?? 0 ?></td>
+                                        <td><?= $row->total_expense ?? 0 ?></td>
+                                        <td><?= $row->closing_balance ?? 0 ?></td>
+                                        <td>
+                                            <?php if ($row->status == 1): ?>
+                                                <a href="<?= base_url('Monthend/cancel/' . $row->id) ?>" class="btn btn-sm btn-danger">Cancel</a>
+                                            <?php else: ?>
+                                                <span class="text-muted">Cancelled</span>
+                                            <?php endif; ?>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="7" class="text-center">No Records Found</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
 
+                </div>
             </div>
         </main>
         <?php include(APPPATH . 'views/components/footer.php'); ?>
@@ -149,24 +82,9 @@
 
 <script>
     $(document).ready(function() {
-        <?php foreach ($all_data as $data): ?>
-            $('#transactionsTable_<?= $data['bank']->id ?>').DataTable({
-                responsive: true,
-                paging: true,
-                searching: true,
-                ordering: true,
-                lengthChange: true,
-                pageLength: 10
-            });
-        <?php endforeach; ?>
-
-        $('#cashTable').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true,
-            ordering: true,
-            lengthChange: true,
-            pageLength: 10
+        $('#dataTable').DataTable({
+            scrollX: true,
+            destroy: true
         });
     });
 </script>

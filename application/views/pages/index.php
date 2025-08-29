@@ -21,9 +21,9 @@
                                 <p class="mt-2 text-muted"><?= date('F j, Y'); ?></p>
                             </div>
                             <div class="card-footer text-center">
-                                <a href="<?= base_url('Monthend/monthly_status') ?>" class="btn btn-dark w-50">
-   Check Month End Status
-</a>
+                                <a href="<?= base_url('Monthend') ?>" class="btn btn-dark w-50">
+                                    Check Month End Status
+                                </a>
 
                             </div>
                         </div>
@@ -260,7 +260,7 @@
                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                     var min = $('#minDate').val();
                     var max = $('#maxDate').val();
-                    var date = data[0]; 
+                    var date = data[0];
 
                     if (!date) return false;
 

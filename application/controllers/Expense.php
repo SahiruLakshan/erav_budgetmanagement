@@ -48,7 +48,7 @@ class Expense extends CI_Controller
         $this->form_validation->set_rules('date', 'Date', 'required');
         $this->form_validation->set_rules('amount', 'Amount', 'required');
         $this->form_validation->set_rules('bank', 'Bank');
-        $this->form_validation->set_rules('spend_money_from_hand', 'spend_money_from_hand');
+        $this->form_validation->set_rules('spend_money_from_hand', 'Spend Money From Hand');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors('<div class="text-white">', '</div>'));
@@ -67,6 +67,8 @@ class Expense extends CI_Controller
         $due_date = $this->input->post('due_date');
         $user_id = $this->session->userdata('user_id');
 
+        $now = date('Y-m-d H:i:s'); 
+
         $data = [
             'tbl_main_expense_types_id' => $main_expense,
             'tbl_sub_expense_types_id' => $sub_expense,
@@ -82,15 +84,19 @@ class Expense extends CI_Controller
         ];
 
         if ($id) {
+            $data['updated_at'] = $now;
             $this->Expense_model->update($id, $data);
             $this->session->set_flashdata('success', 'Record updated successfully.');
         } else {
+            $data['created_at'] = $now;
+            $data['updated_at'] = $now;
             $this->Expense_model->insert($data);
             $this->session->set_flashdata('success', 'Record added successfully.');
         }
 
         redirect('Expense');
     }
+
 
     public function get_by_id($id)
     {

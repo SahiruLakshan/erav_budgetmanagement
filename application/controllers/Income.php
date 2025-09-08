@@ -67,6 +67,8 @@ class Income extends CI_Controller
         $due_date = $this->input->post('due_date');
         $user_id = $this->session->userdata('user_id');
 
+        $now = date('Y-m-d H:i:s'); 
+
         $data = [
             'tbl_main_income_types_id' => $main_income,
             'tbl_sub_income_types_id' => $sub_income,
@@ -82,15 +84,19 @@ class Income extends CI_Controller
         ];
 
         if ($id) {
+            $data['updated_at'] = $now;
             $this->Income_model->update($id, $data);
             $this->session->set_flashdata('success', 'Record updated successfully.');
         } else {
+            $data['created_at'] = $now;
+            $data['updated_at'] = $now;
             $this->Income_model->insert($data);
             $this->session->set_flashdata('success', 'Record added successfully.');
         }
 
         redirect('Income');
     }
+
 
     public function get_by_id($id)
     {

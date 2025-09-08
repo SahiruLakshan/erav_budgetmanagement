@@ -46,7 +46,7 @@ class Monthend_model extends CI_Model
             $this->db->where('tbl_banks_id', $bank_id);
         } else {
             $this->db->where('tbl_banks_id IS NULL', null, false);
-            $this->db->or_where('to_hand', 1); // if you mark cash in hand
+            $this->db->or_where('to_hand', 1); 
         }
         $this->db->where('MONTH(date)', $month);
         $this->db->where('YEAR(date)', $year);
@@ -61,7 +61,7 @@ class Monthend_model extends CI_Model
             $this->db->where('tbl_banks_id', $bank_id);
         } else {
             $this->db->where('tbl_banks_id IS NULL', null, false);
-            $this->db->or_where('from_hand', 1); // if you mark cash in hand
+            $this->db->or_where('from_hand', 1); 
         }
         $this->db->where('MONTH(date)', $month);
         $this->db->where('YEAR(date)', $year);

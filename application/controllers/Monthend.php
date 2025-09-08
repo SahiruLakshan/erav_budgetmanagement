@@ -58,6 +58,8 @@ class Monthend extends CI_Controller
         $total_expense = $this->Monthend_model->get_month_expenses($user_id, $bank_id, $month, $year);
         $closing_balance = $opening_balance + $total_income - $total_expense;
 
+        $now = date('Y-m-d H:i:s'); 
+
         $data = [
             "tbl_user_id"     => $user_id,
             "tbl_bank_id"     => $bank_id,
@@ -67,9 +69,10 @@ class Monthend extends CI_Controller
             "total_income"    => $total_income,
             "total_expense"   => $total_expense,
             "closing_balance" => $closing_balance,
-            "status"          => 1
+            "status"          => 1,
         ];
 
+        $data['created_at'] = $now;
         $this->Monthend_model->create_monthend($data);
         $this->session->set_flashdata('success', 'Month closed successfully!');
         redirect('Monthend');
